@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { getCategories } from './utils/api';
 
 function App() {
   const [backend, setBackend] = useState('backend-data');
 
   useEffect(() => { 
-    const api = process.env.REACT_APP_BACKEND ||  'http://localhost:3001';
-    const url = `${api}/categories`;
-    console.log('fetching from url', url);
-    
-    fetch(url, { headers: { 'Authorization': 'whatever-you-want' }} )
-      .then( (res) => { return(res.text()) })
-      .then((data) => {
-        setBackend(data);
-      });
-  });
+    getCategories()
+      .then(categories => setBackend(JSON.stringify(categories.data)))
+      .catch(err => {
+        console.log(err)
+      })
+  })
 
   return (
     <div className="App">
