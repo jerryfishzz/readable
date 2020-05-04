@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import logo from '../logo.svg';
 import './App.css';
-import { getCategories } from './utils/api';
+import { getCategories } from '../utils/api';
 
 function App() {
   const [backend, setBackend] = useState('backend-data');
