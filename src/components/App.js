@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import logo from '../logo.svg';
 import './App.css';
-import { getCategories } from '../utils/api';
+import { connect } from 'react-redux';
+import { handleGetCategories } from '../actions/categories';
 
-function App() {
-  const [backend, setBackend] = useState('backend-data');
-
+function App(props) {
   useEffect(() => { 
-    getCategories()
-      .then(categories => setBackend(JSON.stringify(categories.data)))
+    const { handleGetCategories } = props
+
+    handleGetCategories()
       .catch(err => {
         console.log(err)
       })
-  })
+  }, [])
+
+  const backend = JSON.stringify(props.categories)
 
   return (
     <div className="App">
@@ -31,4 +33,6 @@ function App() {
   );
 }
 
-export default App;
+const mapStatesToProps = ({ categories }) => ({ categories })
+
+export default connect(mapStatesToProps, { handleGetCategories })(App)

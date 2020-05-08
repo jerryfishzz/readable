@@ -7,8 +7,8 @@ export function getCategories() {
 
   console.log('fetching from url', url)
   return Axios({
-      method: 'get',
-      url,
-      headers: {'Authorization': 'whatever-you-want'},
-    })
+    method: 'get',
+    url,
+    headers: {'Authorization': 'whatever-you-want'},
+  }).then(res => res.data)
 }
