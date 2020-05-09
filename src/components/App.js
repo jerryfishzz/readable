@@ -1,9 +1,11 @@
 import React, { useEffect, Fragment } from 'react';
-import logo from '../logo.svg';
-import './App.css';
 import { connect } from 'react-redux';
-import { handleGetCategories } from '../actions/categories';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+
+import { handleGetCategories } from '../actions/categories';
+import './App.css';
+import Main from './Main';
 
 function App(props) {
   useEffect(() => { 
@@ -18,22 +20,15 @@ function App(props) {
   const backend = JSON.stringify(props.categories)
 
   return (
-    <Fragment>
-      <CssBaseline />
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Talking to the backend yields these categories: <br />
-          {backend}
-        </p>
-      </div>
-    </Fragment>
+    <Router>
+      <Fragment>
+        <CssBaseline />
+        <Switch>
+          <Route path='/' exact render={() => (<Main backend={backend} />)} />
+          <Route path='/react' render={() => (<Main backend="react" />)} />
+        </Switch>
+      </Fragment>
+    </Router>
   );
 }
 
