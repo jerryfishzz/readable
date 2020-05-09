@@ -3,15 +3,15 @@ import { connect } from 'react-redux';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
-import { handleGetCategories } from '../actions/categories';
 import './App.css';
 import Main from './Main';
+import { handleGetInitialData } from '../actions/shared';
 
 function App(props) {
   useEffect(() => { 
-    const { handleGetCategories } = props
+    const { handleGetInitialData } = props
 
-    handleGetCategories()
+    handleGetInitialData()
       .catch(err => {
         console.log(err)
       })
@@ -34,4 +34,4 @@ function App(props) {
 
 const mapStatesToProps = ({ categories }) => ({ categories })
 
-export default connect(mapStatesToProps, { handleGetCategories })(App)
+export default connect(mapStatesToProps, { handleGetInitialData })(App)
