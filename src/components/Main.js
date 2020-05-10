@@ -1,8 +1,7 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
 
-import Header from './Header';
 import SelectMenu from './SelectMenu';
 import PostTable from './PostTable';
 
@@ -10,8 +9,7 @@ function Main(props) {
   const { currentCategory } = props
 
   return (
-    <div className="App">
-      <Header />
+    <Fragment>
       <SelectMenu selectType="categories" />
       <p className="App-intro">
         To get started, edit <code>src/App.js</code> and save to reload.
@@ -21,7 +19,7 @@ function Main(props) {
         {currentCategory}
       </p>
       <PostTable />
-    </div>
+    </Fragment>
   )
 }
 
