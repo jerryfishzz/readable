@@ -1,4 +1,4 @@
-import { SWITCH_CATEGORY } from "../actions/appStatus";
+import { SWITCH_CATEGORY, GET_READY } from "../actions/appStatus";
 
 const initialState = {
   isReady: false,
@@ -11,6 +11,11 @@ export default function appStatus(state = initialState, action) {
       return {
         ...state,
         currentCategory: action.category
+      }
+    case GET_READY:
+      return {
+        ...state,
+        isReady: true
       }
     default:
       return state

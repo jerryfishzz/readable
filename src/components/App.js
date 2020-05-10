@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
@@ -8,15 +8,14 @@ import Main from './Main';
 import Header from './Header';
 import { handleGetInitialData } from '../actions/shared';
 import { Typography } from '@material-ui/core';
+import { getReady } from '../actions/appStatus';
 
 function App(props) {
-  const [isReady, setIsReady] = useState(false)
-
   useEffect(() => { 
-    const { handleGetInitialData } = props
+    const { handleGetInitialData, getReady } = props
 
     handleGetInitialData()
-      .then(() => setIsReady(true))
+      .then(getReady())
       .catch(err => {
         console.log(err)
       })
@@ -28,7 +27,7 @@ function App(props) {
         <CssBaseline />
         <div className="App">
           <Header />
-          {isReady 
+          {props.isReady 
             ? <Switch>
                 <Route path='/' exact component={Main} />
                 {props.categories.map(category => 
@@ -43,6 +42,12 @@ function App(props) {
   );
 }
 
-const mapStatesToProps = ({ categories }) => ({ categories })
+const mapStatesToProps = ({ categories, appStatus }) => ({ 
+  categories,
+  isReady: appStatus.isReady
+})
 
-export default connect(mapStatesToProps, { handleGetInitialData })(App)
+export default connect(
+  mapStatesToProps, 
+  { handleGetInitialData, getReady }
+)(App)
