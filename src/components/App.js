@@ -24,7 +24,7 @@ function App(props) {
         <Switch>
           <Route path='/' exact component={Main} />
           {props.categories.map(category => 
-            <Route path={`/${category.path}`} component={Main} />
+            <Route key={category.path} path={`/${category.path}`} component={Main} />
           )}
         </Switch>
       </Fragment>

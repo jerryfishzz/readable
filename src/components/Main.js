@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 
 import Header from './Header';
 import SelectMenu from './SelectMenu';
+import PostTable from './PostTable';
 
 function Main(props) {
   const { currentCategory } = props
@@ -19,6 +20,7 @@ function Main(props) {
         Talking to the backend yields these categories: <br />
         {currentCategory}
       </p>
+      <PostTable />
     </div>
   )
 }
