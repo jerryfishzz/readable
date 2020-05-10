@@ -17,15 +17,15 @@ function App(props) {
       })
   }, [])
 
-  const backend = JSON.stringify(props.categories)
-
   return (
     <Router>
       <Fragment>
         <CssBaseline />
         <Switch>
-          <Route path='/' exact render={() => (<Main backend={backend} />)} />
-          <Route path='/react' render={() => (<Main backend="react" />)} />
+          <Route path='/' exact component={Main} />
+          {props.categories.map(category => 
+            <Route path={`/${category.path}`} component={Main} />
+          )}
         </Switch>
       </Fragment>
     </Router>
