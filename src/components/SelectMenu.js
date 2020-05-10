@@ -6,7 +6,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+
 import { capitalizedString } from '../utils/helper';
+import { switchCategory } from '../actions/appStatus';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -23,34 +25,32 @@ const getCategories = categories => [{name: 'all', path: ''}, ...categories]
 function SelectMenu(props) {
   const classes = useStyles();
 
-  const { selectType, categories } = props
-  const choices = selectType === 'categories' 
+  const { selectType, categories, currentCategory, switchCategory } = props
+  const selections = selectType === 'categories' 
     ? getCategories(categories) 
     : []
 
-  const [choice, setChoice] = React.useState(choices[0]);
-
   const handleChange = (event) => {
-    setChoice(event.target.value);
+    switchCategory(event.target.value)
   };
 
   return (
     <FormControl className={classes.formControl}>
       <InputLabel>Category</InputLabel>
       <Select
-        value={choice}
+        value={currentCategory}
         onChange={handleChange}
       >
-        {choices.map((choice, index) => 
+        {selections.map((selection, index) => 
           <MenuItem 
-            value={choice.name} 
-            key={choice.name} 
+            value={selection.name} 
+            key={selection.name} 
             component={Link} 
-            to={`/${choice.path}`}
+            to={`/${selection.path}`}
           >
             {selectType === 'categories' && index === 0
-              ? <em>{capitalizedString(choice.name)}</em>
-              : capitalizedString(choice.name)}
+              ? <em>{capitalizedString(selection.name)}</em>
+              : capitalizedString(selection.name)}
           </MenuItem>
         )}
       </Select>
@@ -58,6 +58,9 @@ function SelectMenu(props) {
   )
 }
 
-const mapStatesToProps = ({ categories }) => ({ categories })
+const mapStatesToProps = ({ categories, appStatus }) => ({ 
+  categories,
+  currentCategory: appStatus.currentCategory
+ })
 
-export default connect(mapStatesToProps)(SelectMenu)
+export default connect(mapStatesToProps, { switchCategory })(SelectMenu)

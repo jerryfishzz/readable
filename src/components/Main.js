@@ -24,7 +24,6 @@ function Main(props) {
 }
 
 const mapStateToProps = ({ categories }, props) => {
-  console.log(props)
   const pathName = props.location.pathname
   const currentCategory = pathName === '/'
     ? JSON.stringify(categories)
