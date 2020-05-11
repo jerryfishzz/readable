@@ -2,15 +2,16 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
 
-import SelectMenu from './SelectMenu';
+import CategoryDropDown from './CategoryDroipDown';
 import PostTable from './PostTable';
+import SortDropDown from './SortDropDown';
 
 function Main(props) {
   const { currentCategory } = props
 
   return (
     <Fragment>
-      <SelectMenu selectType="categories" />
+      <CategoryDropDown />
       <p className="App-intro">
         To get started, edit <code>src/App.js</code> and save to reload.
       </p>
@@ -18,6 +19,7 @@ function Main(props) {
         Talking to the backend yields these categories: <br />
         {currentCategory}
       </p>
+      <SortDropDown />
       <PostTable />
     </Fragment>
   )

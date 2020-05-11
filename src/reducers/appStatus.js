@@ -1,8 +1,9 @@
-import { SWITCH_CATEGORY, GET_READY } from "../actions/appStatus";
+import { SWITCH_CATEGORY, GET_READY, SWITCH_SORT } from "../actions/appStatus";
 
 const initialState = {
   isReady: false,
-  currentCategory: 'all'
+  currentCategory: 'all',
+  currentSort: 'default'
 }
 
 export default function appStatus(state = initialState, action) {
@@ -16,6 +17,11 @@ export default function appStatus(state = initialState, action) {
       return {
         ...state,
         isReady: true
+      }
+    case SWITCH_SORT:
+      return {
+        ...state,
+        currentSort: action.sort
       }
     default:
       return state

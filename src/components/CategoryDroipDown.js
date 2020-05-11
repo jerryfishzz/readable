@@ -20,15 +20,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getCategories = categories => [{name: 'all', path: ''}, ...categories]
-
-function SelectMenu(props) {
+function CategoryDropDown(props) {
   const classes = useStyles();
 
-  const { selectType, categories, currentCategory, switchCategory } = props
-  const selections = selectType === 'categories' 
-    ? getCategories(categories) 
-    : []
+  const { categories, currentCategory, switchCategory } = props
+  const selections = [{name: 'all', path: ''}, ...categories]
 
   const handleChange = (event) => {
     switchCategory(event.target.value)
@@ -48,7 +44,7 @@ function SelectMenu(props) {
             component={Link} 
             to={`/${selection.path}`}
           >
-            {selectType === 'categories' && index === 0
+            {index === 0
               ? <em>{capitalizedString(selection.name)}</em>
               : capitalizedString(selection.name)}
           </MenuItem>
@@ -63,4 +59,4 @@ const mapStatesToProps = ({ categories, appStatus }) => ({
   currentCategory: appStatus.currentCategory
  })
 
-export default connect(mapStatesToProps, { switchCategory })(SelectMenu)
+export default connect(mapStatesToProps, { switchCategory })(CategoryDropDown)
