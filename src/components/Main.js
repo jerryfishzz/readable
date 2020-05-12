@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
 
-import CategoryDropDown from './CategoryDroipDown';
+import CategoryDropDown from './CategoryDropDown';
 import PostTable from './PostTable';
 import SortDropDown from './SortDropDown';
 

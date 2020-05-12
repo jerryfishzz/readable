@@ -77,7 +77,6 @@ const mapStatesToProps = ({ posts, appStatus }, props) => {
         })
 
   return {
-    pathName,
     sortedPosts,
   }
 }

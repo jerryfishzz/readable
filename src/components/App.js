@@ -47,7 +47,4 @@ const mapStatesToProps = ({ categories, appStatus }) => ({
   isReady: appStatus.isReady
 })
 
-export default connect(
-  mapStatesToProps, 
-  { handleGetInitialData, getReady }
-)(App)
+export default connect(mapStatesToProps, { handleGetInitialData, getReady })(App)

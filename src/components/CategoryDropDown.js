@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -8,7 +8,6 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 import { capitalizedString } from '../utils/helper';
-import { switchCategory } from '../actions/appStatus';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -23,20 +22,13 @@ const useStyles = makeStyles((theme) => ({
 function CategoryDropDown(props) {
   const classes = useStyles();
 
-  const { categories, currentCategory, switchCategory } = props
+  const { categories, path } = props
   const selections = [{name: 'all', path: ''}, ...categories]
-
-  const handleChange = (event) => {
-    switchCategory(event.target.value)
-  };
 
   return (
     <FormControl className={classes.formControl}>
       <InputLabel>Category</InputLabel>
-      <Select
-        value={currentCategory}
-        onChange={handleChange}
-      >
+      <Select value={path}>
         {selections.map((selection, index) => 
           <MenuItem 
             value={selection.name} 
@@ -54,9 +46,14 @@ function CategoryDropDown(props) {
   )
 }
 
-const mapStatesToProps = ({ categories, appStatus }) => ({ 
-  categories,
-  currentCategory: appStatus.currentCategory
- })
+const mapStatesToProps = ({ categories }, props) => {
+  let pathName = props.location.pathname
+  let path = pathName.slice(1) ? pathName.slice(1) : 'all'
 
-export default connect(mapStatesToProps, { switchCategory })(CategoryDropDown)
+  return { 
+    path,
+    categories,
+  }
+}
+
+export default withRouter(connect(mapStatesToProps)(CategoryDropDown))
