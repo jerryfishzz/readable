@@ -8,6 +8,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 import { capitalizedString } from '../utils/helper';
+import { handleGetCategories } from '../actions/categories';
+import { loadingPosts, loadingCategories, getCategoriesReady } from '../actions/appStatus';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -22,13 +24,29 @@ const useStyles = makeStyles((theme) => ({
 function CategoryDropDown(props) {
   const classes = useStyles();
 
-  const { categories, path } = props
+  const { categories, path, loadingPosts, loadingCategories, getCategoriesReady } = props
   const selections = [{name: 'all', path: ''}, ...categories]
+
+  const handleChange = e => {
+    loadingPosts()
+
+    if (e.target.value === 'all') {
+      loadingCategories()
+      props.handleGetCategories()
+        .then(getCategoriesReady())
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }
 
   return (
     <FormControl className={classes.formControl}>
       <InputLabel>Category</InputLabel>
-      <Select value={path}>
+      <Select 
+        value={path}
+        onChange={handleChange}
+      >
         {selections.map((selection, index) => 
           <MenuItem 
             value={selection.name} 
@@ -56,4 +74,14 @@ const mapStatesToProps = ({ categories }, props) => {
   }
 }
 
-export default withRouter(connect(mapStatesToProps)(CategoryDropDown))
+export default withRouter(
+  connect(
+    mapStatesToProps, 
+    {  
+      handleGetCategories, 
+      loadingPosts,
+      loadingCategories,
+      getCategoriesReady
+    }
+  )(CategoryDropDown)
+)

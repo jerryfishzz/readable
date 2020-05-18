@@ -9,6 +9,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import IconButton from '@material-ui/core/IconButton';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { convertTimestampToReadable } from '../utils/helper';
 
 const useStyles = makeStyles({
@@ -29,6 +32,7 @@ function PostTable(props) {
             <TableCell align="right">Author</TableCell>
             <TableCell align="right">Number of comments</TableCell>
             <TableCell align="right">Current score</TableCell>
+            <TableCell align="right">Created time</TableCell>
             <TableCell align="right">Like</TableCell>
             <TableCell align="right">Dislike</TableCell>
             <TableCell align="right">Delete</TableCell>
@@ -47,6 +51,12 @@ function PostTable(props) {
                   <TableCell align="right">
                     {convertTimestampToReadable(post.timestamp)}
                   </TableCell>
+                  <TableCell align="right">
+                    <IconButton><ThumbUpIcon /></IconButton>
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton><ThumbDownIcon /></IconButton>
+                  </TableCell>
                 </TableRow>
               ))
             : <TableRow>
@@ -59,20 +69,14 @@ function PostTable(props) {
   );
 }
 
-const mapStatesToProps = ({ posts, appStatus }, props) => {
-  const pathName = props.location.pathname
-
-  const displayingPosts = pathName === '/' 
-    ? posts 
-    : posts.filter(post => `/${post.category}` === pathName)
-
-    // To make redux work, one condition is the data must be immutable
+const mapStatesToProps = ({ posts, appStatus }) => {
+    // To make redux work, one requirement is the data must be immutable
     // sort() is a mutable method so here need to shallow copy the original array  
     const sortedPosts = appStatus.currentSort === 'default'
-    ? [...displayingPosts]
+    ? [...posts]
     : appStatus.currentSort === 'date'
-      ? [...displayingPosts].sort((a, b) => b.timestamp - a.timestamp)
-      : [...displayingPosts].sort((a, b) => {
+      ? [...posts].sort((a, b) => b.timestamp - a.timestamp)
+      : [...posts].sort((a, b) => {
           return a.voteScore - b.voteScore
         })
 

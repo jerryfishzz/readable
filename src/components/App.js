@@ -2,20 +2,20 @@ import React, { useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { Typography } from '@material-ui/core';
 
 import './App.css';
-import Main from './Main';
+import PostList from './PostList';
 import Header from './Header';
-import { handleGetInitialData } from '../actions/shared';
-import { Typography } from '@material-ui/core';
-import { getReady } from '../actions/appStatus';
+import { getCategoriesReady } from '../actions/appStatus';
+import { handleGetCategories } from '../actions/categories';
 
 function App(props) {
   useEffect(() => { 
-    const { handleGetInitialData, getReady } = props
+    const { getCategoriesReady, handleGetCategories } = props
 
-    handleGetInitialData()
-      .then(getReady())
+    handleGetCategories()
+      .then(getCategoriesReady())
       .catch(err => {
         console.log(err)
       })
@@ -27,11 +27,11 @@ function App(props) {
         <CssBaseline />
         <div className="App">
           <Header />
-          {props.isReady 
+          {props.areCategoriesReady 
             ? <Switch>
-                <Route path='/' exact component={Main} />
+                <Route path='/' exact component={PostList} />
                 {props.categories.map(category => 
-                  <Route key={category.path} path={`/${category.path}`} component={Main} />
+                  <Route key={category.path} path={`/${category.path}`} component={PostList} />
                 )}
               </Switch>
             : <Typography variant="h4">Loading...</Typography>
@@ -44,7 +44,7 @@ function App(props) {
 
 const mapStatesToProps = ({ categories, appStatus }) => ({ 
   categories,
-  isReady: appStatus.isReady
+  areCategoriesReady: appStatus.areCategoriesReady
 })
 
-export default connect(mapStatesToProps, { handleGetInitialData, getReady })(App)
+export default connect(mapStatesToProps, { getCategoriesReady, handleGetCategories })(App)

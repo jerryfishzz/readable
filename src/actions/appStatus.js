@@ -1,9 +1,18 @@
-export const GET_READY = 'GET_READY'
+export const GET_CATEGORIES_READY = 'GET_CATEGORIES_READY'
+export const GET_POSTS_READY = 'GET_POSTS_READY'
 export const SWITCH_SORT = 'SWITCH_SORT'
+export const LOADING_POSTS = 'LOADING_POSTS'
+export const LOADING_CATEGORIES = 'LOADING_CATEGORIES'
 
-export function getReady() {
+export function getCategoriesReady() {
   return {
-    type: GET_READY
+    type: GET_CATEGORIES_READY
+  }
+}
+
+export function getPostsReady() {
+  return {
+    type: GET_POSTS_READY
   }
 }
 
@@ -11,5 +20,17 @@ export function switchSort(sort) {
   return {
     type: SWITCH_SORT,
     sort
+  }
+}
+
+export function loadingPosts() {
+  return {
+    type: LOADING_POSTS,
+  }
+}
+
+export function loadingCategories() {
+  return {
+    type: LOADING_CATEGORIES
   }
 }

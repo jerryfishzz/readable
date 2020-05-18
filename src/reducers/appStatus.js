@@ -1,21 +1,37 @@
-import { GET_READY, SWITCH_SORT } from "../actions/appStatus";
+import { GET_CATEGORIES_READY, SWITCH_SORT, GET_POSTS_READY, LOADING_POSTS, LOADING_CATEGORIES } from "../actions/appStatus";
 
 const initialState = {
-  isReady: false,
+  areCategoriesReady: false,
+  arePostsReady: false,
   currentSort: 'default'
 }
 
 export default function appStatus(state = initialState, action) {
   switch (action.type) {
-    case GET_READY:
+    case GET_CATEGORIES_READY:
       return {
         ...state,
-        isReady: true
+        areCategoriesReady: true
+      }
+    case GET_POSTS_READY:
+      return {
+        ...state,
+        arePostsReady: true
       }
     case SWITCH_SORT:
       return {
         ...state,
         currentSort: action.sort
+      }
+    case LOADING_POSTS:
+      return {
+        ...state,
+        arePostsReady: false
+      }
+    case LOADING_CATEGORIES:
+      return {
+        ...state,
+        areCategoriesReady: false
       }
     default:
       return state
