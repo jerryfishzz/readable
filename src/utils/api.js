@@ -34,3 +34,15 @@ export function getCategoryPosts(category) {
     headers: {'Authorization': 'whatever-you-want'},
   }).then(res => res.data)
 }
+
+export function votePost(pid, vote) {
+  const url = `${baseURL}/posts/${pid}`
+
+  console.log('vote from url', url)
+  return Axios({
+    method: 'post',
+    url,
+    headers: {'Authorization': 'whatever-you-want'},
+    data: JSON.stringify(vote)
+  }).then(res => res.data)
+}

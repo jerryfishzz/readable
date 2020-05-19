@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { convertTimestampToReadable } from '../utils/helper';
+import { handleUpVote, handleDownVote } from '../actions/posts';
 
 const useStyles = makeStyles({
   table: {
@@ -22,6 +23,25 @@ const useStyles = makeStyles({
 
 function PostTable(props) {
   const classes = useStyles();
+  const { handleUpVote, handleDownVote } = props
+
+  const handleUpClick = pid => {
+    const vote = {
+      option: 'upVote'
+    }
+
+    handleUpVote(pid, vote)
+      .catch(err => console.log(err))
+  }
+
+  const handleDownClick = pid => {
+    const vote = {
+      option: 'downVote'
+    }
+
+    handleDownVote(pid, vote)
+      .catch(err => console.log(err))
+  }
 
   return (
     <TableContainer component={Paper}>
@@ -52,10 +72,14 @@ function PostTable(props) {
                     {convertTimestampToReadable(post.timestamp)}
                   </TableCell>
                   <TableCell align="right">
-                    <IconButton><ThumbUpIcon /></IconButton>
+                    <IconButton onClick={() => handleUpClick(post.id)}>
+                      <ThumbUpIcon />
+                    </IconButton>
                   </TableCell>
                   <TableCell align="right">
-                    <IconButton><ThumbDownIcon /></IconButton>
+                    <IconButton onClick={() => handleDownClick(post.id)}>
+                      <ThumbDownIcon />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))
@@ -85,4 +109,4 @@ const mapStatesToProps = ({ posts, appStatus }) => {
   }
 }
 
-export default withRouter(connect(mapStatesToProps)(PostTable))
+export default withRouter(connect(mapStatesToProps, { handleUpVote, handleDownVote })(PostTable))

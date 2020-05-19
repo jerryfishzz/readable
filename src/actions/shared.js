@@ -1,6 +1,6 @@
 import * as ReadableAPI from '../utils/api'
 import { getCategories } from './categories'
-import { getPosts } from './posts'
+// import { getPosts } from './posts'
 
 // export function handleGetInitialData() {
 //   return dispatch => {
