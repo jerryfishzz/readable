@@ -39,10 +39,11 @@ export function votePost(pid, vote) {
   const url = `${baseURL}/posts/${pid}`
 
   console.log('vote from url', url)
+  console.log(vote)
   return Axios({
     method: 'post',
     url,
     headers: {'Authorization': 'whatever-you-want'},
-    data: JSON.stringify(vote)
+    data: vote
   }).then(res => res.data)
 }

@@ -39,14 +39,24 @@ function downVote(pid) {
 
 export function handleUpVote(pid, vote) {
   return dispatch => {
+    dispatch(upVote(pid))
+
     return ReadableAPI.votePost(pid, vote)
-      .then(() => dispatch(upVote(pid)))
+      .catch(err => {
+        dispatch(downVote(pid))
+        throw err
+      })
   }
 }
 
 export function handleDownVote(pid, vote) {
   return dispatch => {
+    dispatch(downVote(pid))
+
     return ReadableAPI.votePost(pid, vote)
-      .then(() => dispatch(downVote(pid)))
+      .catch(err => {
+        dispatch(upVote(pid))
+        throw err
+      })
   }
 }
