@@ -1,4 +1,4 @@
-import { GET_POSTS, UP_VOTE, DOWN_VOTE } from "../actions/posts"
+import { GET_POSTS, UP_VOTE, DOWN_VOTE, DELETE_POST, RESTORE_POST } from "../actions/posts"
 
 export default function posts(state = [], action) {
   switch (action.type) {
@@ -20,6 +20,26 @@ export default function posts(state = [], action) {
             return {
               ...post,
               voteScore: post.voteScore - 1
+            }
+          }
+          return post
+        })
+      case DELETE_POST:
+        return state.map(post => {
+          if (post.id === action.pid) {
+            return {
+              ...post,
+              deleted: true
+            }
+          }
+          return post
+        })
+      case RESTORE_POST:
+        return state.map(post => {
+          if (post.id === action.pid) {
+            return {
+              ...post,
+              deleted: false
             }
           }
           return post

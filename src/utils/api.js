@@ -39,11 +39,21 @@ export function votePost(pid, vote) {
   const url = `${baseURL}/posts/${pid}`
 
   console.log('vote from url', url)
-  console.log(vote)
   return Axios({
     method: 'post',
     url,
     headers: {'Authorization': 'whatever-you-want'},
     data: vote
+  }).then(res => res.data)
+}
+
+export function deletePost(pid) {
+  const url = `${baseURL}/posts/${pid}`
+
+  console.log('delete from url', url)
+  return Axios({
+    method: 'delete',
+    url,
+    headers: {'Authorization': 'whatever-you-want'},
   }).then(res => res.data)
 }

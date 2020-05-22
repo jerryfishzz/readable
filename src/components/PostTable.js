@@ -12,8 +12,10 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
+import DeleteIcon from '@material-ui/icons/Delete';
+
 import { convertTimestampToReadable } from '../utils/helper';
-import { handleUpVote, handleDownVote } from '../actions/posts';
+import { handleUpVote, handleDownVote, handleDeletePost } from '../actions/posts';
 
 const useStyles = makeStyles({
   table: {
@@ -23,7 +25,7 @@ const useStyles = makeStyles({
 
 function PostTable(props) {
   const classes = useStyles();
-  const { handleUpVote, handleDownVote } = props
+  const { handleUpVote, handleDownVote, handleDeletePost } = props
 
   const handleUpClick = pid => {
     const vote = {
@@ -40,6 +42,11 @@ function PostTable(props) {
     }
 
     handleDownVote(pid, vote)
+      .catch(err => console.log(err))
+  }
+
+  const handleDeleteClick = pid => {
+    handleDeletePost(pid)
       .catch(err => console.log(err))
   }
 
@@ -60,29 +67,36 @@ function PostTable(props) {
         </TableHead>
         <TableBody>
           {props.sortedPosts.length 
-            ? props.sortedPosts.map((post) => (
-                <TableRow key={post.id}>
-                  <TableCell component="th" scope="row">
-                    {post.title}
-                  </TableCell>
-                  <TableCell align="right">{post.author}</TableCell>
-                  <TableCell align="right">{post.commentCount}</TableCell>
-                  <TableCell align="right">{post.voteScore}</TableCell>
-                  <TableCell align="right">
-                    {convertTimestampToReadable(post.timestamp)}
-                  </TableCell>
-                  <TableCell align="right">
-                    <IconButton onClick={() => handleUpClick(post.id)}>
-                      <ThumbUpIcon />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell align="right">
-                    <IconButton onClick={() => handleDownClick(post.id)}>
-                      <ThumbDownIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))
+            ? props.sortedPosts.map(post => 
+                !post.deleted && (
+                  <TableRow key={post.id}>
+                    <TableCell component="th" scope="row">
+                      {post.title}
+                    </TableCell>
+                    <TableCell align="right">{post.author}</TableCell>
+                    <TableCell align="right">{post.commentCount}</TableCell>
+                    <TableCell align="right">{post.voteScore}</TableCell>
+                    <TableCell align="right">
+                      {convertTimestampToReadable(post.timestamp)}
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton onClick={() => handleUpClick(post.id)}>
+                        <ThumbUpIcon />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton onClick={() => handleDownClick(post.id)}>
+                        <ThumbDownIcon />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton onClick={() => handleDeleteClick(post.id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                )
+              )
             : <TableRow>
                 <TableCell>There is no posts under this category.</TableCell>
               </TableRow>
@@ -109,4 +123,9 @@ const mapStatesToProps = ({ posts, appStatus }) => {
   }
 }
 
-export default withRouter(connect(mapStatesToProps, { handleUpVote, handleDownVote })(PostTable))
+export default withRouter(
+  connect(
+    mapStatesToProps, 
+    { handleUpVote, handleDownVote, handleDeletePost }
+  )(PostTable)
+)

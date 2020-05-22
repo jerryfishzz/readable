@@ -3,6 +3,8 @@ import * as ReadableAPI from '../utils/api'
 export const GET_POSTS = 'GET_POSTS'
 export const UP_VOTE = 'UP_VOTE'
 export const DOWN_VOTE = 'DOWN_VOTE'
+export const DELETE_POST = 'DELETE_POST'
+export const RESTORE_POST = 'RESTORE_POST'
 
 function getPosts(posts) {
   return {
@@ -56,6 +58,32 @@ export function handleDownVote(pid, vote) {
     return ReadableAPI.votePost(pid, vote)
       .catch(err => {
         dispatch(upVote(pid))
+        throw err
+      })
+  }
+}
+
+function deletePost(pid) {
+  return {
+    type: DELETE_POST,
+    pid
+  }
+}
+
+function restorePost(pid) {
+  return {
+    type: RESTORE_POST,
+    pid
+  }
+}
+
+export function handleDeletePost(pid) {
+  return dispatch => {
+    dispatch(deletePost(pid))
+
+    return ReadableAPI.deletePost(pid)
+      .catch(err => {
+        dispatch(restorePost(pid))
         throw err
       })
   }
