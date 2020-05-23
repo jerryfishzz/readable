@@ -1,7 +1,7 @@
 import React, { useEffect, Fragment } from 'react'
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom'
-import { Typography } from '@material-ui/core';
+import { Link, withRouter } from 'react-router-dom'
+import { Typography, Button } from '@material-ui/core';
 
 import CategoryDropDown from './CategoryDropDown';
 import PostTable from './PostTable';
@@ -21,6 +21,13 @@ function PostList(props) {
   return (
     <Fragment>
       <CategoryDropDown />
+      <Button 
+        variant="contained"
+        component={Link} 
+        to="/posts/new"
+      >
+        Add Post
+      </Button>
       <p className="App-intro">
         To get started, edit <code>src/App.js</code> and save to reload.
       </p>
