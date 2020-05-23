@@ -1,5 +1,16 @@
 import React, { useState } from 'react'
-import { makeStyles, TextField } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { 
+  makeStyles, 
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  FormHelperText,
+  InputLabel
+} from '@material-ui/core';
+
+import { capitalizedString } from '../utils/helper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -7,6 +18,13 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
       width: '25ch',
     },
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
   },
 }));
 
@@ -30,6 +48,12 @@ function CreatePost(props) {
   const [author, setAuthor] = useState('')
   const [authorError, setAuthorError] = useState(false)
   const handleAuthorChange = handleChange(setAuthor, setAuthorError)
+
+  const { categories } = props
+
+  const [dropdown, setDropdown] = useState('')
+  const [dropdownError, setDropdownError] = useState(false)
+  const handleDropdownChange = handleChange(setDropdown, setDropdownError)
   
   return (
     <form className={classes.root} noValidate autoComplete="off">
@@ -60,8 +84,46 @@ function CreatePost(props) {
         onChange={handleAuthorChange}
         helperText={authorError ? 'Cannot be blank!' : ''} 
       />
+      <FormControl 
+        className={classes.formControl} 
+        error={dropdownError}
+        required
+      >
+        <InputLabel shrink id="create-dropdown">
+          Category
+        </InputLabel>
+        <Select 
+          labelId="create-dropdown"
+          value={dropdown}
+          displayEmpty
+          className={classes.selectEmpty}
+          onChange={handleDropdownChange}
+          onBlur={() => handleBlur(dropdown, setDropdownError)}
+        >
+          <MenuItem value="">
+            <em>Choose A Category</em>
+          </MenuItem>
+          {categories.map((category, index) => 
+            <MenuItem 
+              value={category} 
+              key={index} 
+            >
+              {capitalizedString(category)}
+            </MenuItem>
+          )}
+        </Select>
+        <FormHelperText>
+          {dropdownError ? 'Must choose a category' : ''}
+        </FormHelperText>
+      </FormControl>
     </form>
   )
 }
 
-export default CreatePost
+const mapStatesToProps = ({ categories }) => {
+  return { 
+    categories: categories.map(category => category.name)
+  }
+}
+
+export default connect(mapStatesToProps)(CreatePost)
