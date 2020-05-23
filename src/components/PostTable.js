@@ -56,6 +56,7 @@ function PostTable(props) {
         <TableHead>
           <TableRow>
             <TableCell>Title</TableCell>
+            <TableCell align="right">Body</TableCell>
             <TableCell align="right">Author</TableCell>
             <TableCell align="right">Number of comments</TableCell>
             <TableCell align="right">Current score</TableCell>
@@ -73,6 +74,7 @@ function PostTable(props) {
                     <TableCell component="th" scope="row">
                       {post.title}
                     </TableCell>
+                    <TableCell align="right">{post.body}</TableCell>
                     <TableCell align="right">{post.author}</TableCell>
                     <TableCell align="right">{post.commentCount}</TableCell>
                     <TableCell align="right">{post.voteScore}</TableCell>
