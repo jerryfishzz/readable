@@ -7,7 +7,8 @@ import {
   MenuItem,
   FormControl,
   FormHelperText,
-  InputLabel
+  InputLabel,
+  Button
 } from '@material-ui/core';
 
 import { capitalizedString } from '../utils/helper';
@@ -28,14 +29,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const validateInput = (input, setInputError) => {
+  if (input === '') {
+    setInputError(true)
+    return false
+  }
+  return true
+}
+
 function CreatePost(props) {
   const classes = useStyles();
 
-  const handleChange = (setMethod, setPropError) => e => {
+  const handleChange = (setMethod, setInputError) => e => {
     setMethod(e.target.value)
-    if(e.target.value !== '') setPropError(false)
+    if(e.target.value !== '') setInputError(false)
   }
-  const handleBlur = (prop, setPropError) => prop === '' ? setPropError(true) : setPropError(false)
+  const handleBlur = (input, setInputError) => input === '' ? setInputError(true) : setInputError(false)
 
   const [title, setTitle] = useState('')
   const [titleError, setTitleError] = useState(false)
@@ -54,6 +63,15 @@ function CreatePost(props) {
   const [dropdown, setDropdown] = useState('')
   const [dropdownError, setDropdownError] = useState(false)
   const handleDropdownChange = handleChange(setDropdown, setDropdownError)
+
+  const validateForm = () => {
+    const validateTitle = validateInput(title, setTitleError)
+    const validateBody = validateInput(body, setBodyError)
+    const validateAuthor = validateInput(author, setAuthorError)
+    const validateDropdown = validateInput(dropdown, setDropdownError)
+
+    return validateTitle && validateBody && validateAuthor && validateDropdown
+  }
   
   return (
     <form className={classes.root} noValidate autoComplete="off">
@@ -116,6 +134,12 @@ function CreatePost(props) {
           {dropdownError ? 'Must choose a category' : ''}
         </FormHelperText>
       </FormControl>
+      <Button 
+        variant="contained"
+        onClick={validateForm}
+      >
+        Submit
+      </Button>
     </form>
   )
 }
