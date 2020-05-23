@@ -33,7 +33,7 @@ function PostTable(props) {
     }
 
     handleUpVote(pid, vote)
-      .catch(err => console.log(err))
+      .catch(err => alert(err))
   }
 
   const handleDownClick = pid => {
@@ -42,12 +42,12 @@ function PostTable(props) {
     }
 
     handleDownVote(pid, vote)
-      .catch(err => console.log(err))
+      .catch(err => alert(err))
   }
 
   const handleDeleteClick = pid => {
     handleDeletePost(pid)
-      .catch(err => console.log(err))
+      .catch(err => alert(err))
   }
 
   return (

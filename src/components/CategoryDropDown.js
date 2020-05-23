@@ -33,10 +33,8 @@ function CategoryDropDown(props) {
     if (e.target.value === 'all') {
       loadingCategories()
       props.handleGetCategories()
-        .then(getCategoriesReady())
-        .catch(err => {
-          console.log(err)
-        })
+        .then(() => getCategoriesReady())
+        .catch(err => alert(err))
     }
   }
 
