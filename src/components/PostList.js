@@ -14,7 +14,7 @@ function PostList(props) {
 
   useEffect(() => {
     handleGetPosts(category)
-      .then(getPostsReady())
+      .then(() => getPostsReady())
       .catch(err => console.log(err))
   }, [])
 

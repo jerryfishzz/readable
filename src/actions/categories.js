@@ -11,8 +11,6 @@ export function getCategories(categories) {
 export function handleGetCategories() {
   return dispatch => {
     return ReadableAPI.getCategories()
-      .then(categories => {
-        dispatch(getCategories(categories))
-      })
+      .then(categories => dispatch(getCategories(categories)))
   }
 }

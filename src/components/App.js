@@ -4,6 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Typography } from '@material-ui/core';
 
+
 import './App.css';
 import PostList from './PostList';
 import Header from './Header';
@@ -15,10 +16,8 @@ function App(props) {
     const { getCategoriesReady, handleGetCategories } = props
 
     handleGetCategories()
-      .then(getCategoriesReady())
-      .catch(err => {
-        console.log(err)
-      })
+      .then(() => getCategoriesReady())
+      .catch(err => alert(err))
   }, [])
 
   return (
