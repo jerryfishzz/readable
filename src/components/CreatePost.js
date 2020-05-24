@@ -1,3 +1,4 @@
+import * as ReadableAPI from '../utils/api'
 import React, { useState } from 'react'
 import { connect } from 'react-redux';
 import { 
@@ -10,6 +11,7 @@ import {
   InputLabel,
   Button
 } from '@material-ui/core';
+import uniqid from 'uniqid'
 
 import { capitalizedString } from '../utils/helper';
 
@@ -71,6 +73,25 @@ function CreatePost(props) {
     const validateDropdown = validateInput(dropdown, setDropdownError)
 
     return validateTitle && validateBody && validateAuthor && validateDropdown
+  }
+
+  const handleSubmit = () => {
+    const isFormValid = validateForm()
+
+    if (isFormValid) {
+      const post = {
+        id: uniqid(),
+        timestamp: Date.now(),
+        title: title,
+        body: body,
+        author: author,
+        category: dropdown,
+      }
+
+      ReadableAPI.addPost(post)
+        .then(() => alert('Post has been added successfully!'))
+        .catch(err => alert(err))
+    }
   }
   
   return (
@@ -136,7 +157,7 @@ function CreatePost(props) {
       </FormControl>
       <Button 
         variant="contained"
-        onClick={validateForm}
+        onClick={handleSubmit}
       >
         Submit
       </Button>

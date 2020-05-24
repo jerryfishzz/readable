@@ -5,6 +5,7 @@ export const UP_VOTE = 'UP_VOTE'
 export const DOWN_VOTE = 'DOWN_VOTE'
 export const DELETE_POST = 'DELETE_POST'
 export const RESTORE_POST = 'RESTORE_POST'
+export const ADD_POST = 'ADD_POST'
 
 function getPosts(posts) {
   return {
@@ -86,5 +87,19 @@ export function handleDeletePost(pid) {
         dispatch(restorePost(pid))
         throw err
       })
+  }
+}
+
+function addPost(post) {
+  return {
+    type: ADD_POST,
+    post
+  }
+}
+
+export function handleAddPost(post) {
+  return dispatch => {
+    return ReadableAPI.addPost(post)
+      .then(res => dispatch(addPost(res)))
   }
 }
