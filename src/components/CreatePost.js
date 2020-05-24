@@ -1,6 +1,7 @@
 import * as ReadableAPI from '../utils/api'
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom'
 import { 
   makeStyles, 
   TextField,
@@ -60,9 +61,9 @@ function CreatePost(props) {
   const [authorError, setAuthorError] = useState(false)
   const handleAuthorChange = handleChange(setAuthor, setAuthorError)
 
-  const { categories } = props
+  const { categories, initialDropdown, areCategoriesReady } = props
 
-  const [dropdown, setDropdown] = useState('')
+  const [dropdown, setDropdown] = useState(initialDropdown)
   const [dropdownError, setDropdownError] = useState(false)
   const handleDropdownChange = handleChange(setDropdown, setDropdownError)
 
@@ -95,80 +96,93 @@ function CreatePost(props) {
   }
   
   return (
-    <form className={classes.root} noValidate autoComplete="off">
-      <TextField 
-        error={titleError}
-        required 
-        label="Title" 
-        onBlur={() => handleBlur(title, setTitleError)} 
-        value={title}
-        onChange={handleTitleChange}
-        helperText={titleError ? 'Cannot be blank!' : ''}
-      />
-      <TextField 
-        error={bodyError}
-        required 
-        label="Body" 
-        onBlur={() => handleBlur(body, setBodyError)} 
-        value={body}
-        onChange={handleBodyChange}
-        helperText={bodyError ? 'Cannot be blank!' : ''}
-      />
-      <TextField 
-        error={authorError}
-        required 
-        label="Author"
-        onBlur={() => handleBlur(author, setAuthorError)} 
-        value={author}
-        onChange={handleAuthorChange}
-        helperText={authorError ? 'Cannot be blank!' : ''} 
-      />
-      <FormControl 
-        className={classes.formControl} 
-        error={dropdownError}
-        required
-      >
-        <InputLabel shrink id="create-dropdown">
-          Category
-        </InputLabel>
-        <Select 
-          labelId="create-dropdown"
-          value={dropdown}
-          displayEmpty
-          className={classes.selectEmpty}
-          onChange={handleDropdownChange}
-          onBlur={() => handleBlur(dropdown, setDropdownError)}
-        >
-          <MenuItem value="">
-            <em>Choose A Category</em>
-          </MenuItem>
-          {categories.map((category, index) => 
-            <MenuItem 
-              value={category} 
-              key={index} 
+    <Fragment>
+      {areCategoriesReady
+        ? <form className={classes.root} noValidate autoComplete="off">
+            <TextField 
+            error={titleError}
+            required 
+            label="Title" 
+            onBlur={() => handleBlur(title, setTitleError)} 
+            value={title}
+            onChange={handleTitleChange}
+            helperText={titleError ? 'Cannot be blank!' : ''}
+          />
+            <TextField 
+              error={bodyError}
+              required 
+              label="Body" 
+              onBlur={() => handleBlur(body, setBodyError)} 
+              value={body}
+              onChange={handleBodyChange}
+              helperText={bodyError ? 'Cannot be blank!' : ''}
+            />
+            <TextField 
+              error={authorError}
+              required 
+              label="Author"
+              onBlur={() => handleBlur(author, setAuthorError)} 
+              value={author}
+              onChange={handleAuthorChange}
+              helperText={authorError ? 'Cannot be blank!' : ''} 
+            />
+            <FormControl 
+              className={classes.formControl} 
+              error={dropdownError}
+              required
             >
-              {capitalizedString(category)}
-            </MenuItem>
-          )}
-        </Select>
-        <FormHelperText>
-          {dropdownError ? 'Must choose a category' : ''}
-        </FormHelperText>
-      </FormControl>
-      <Button 
-        variant="contained"
-        onClick={handleSubmit}
-      >
-        Submit
-      </Button>
-    </form>
+              <InputLabel shrink id="create-dropdown">
+                Category
+              </InputLabel>
+              <Select 
+                labelId="create-dropdown"
+                value={dropdown}
+                displayEmpty
+                className={classes.selectEmpty}
+                onChange={handleDropdownChange}
+                onBlur={() => handleBlur(dropdown, setDropdownError)}
+              >
+                <MenuItem value="">
+                  <em>Choose A Category</em>
+                </MenuItem>
+                {categories.map((category, index) => 
+                  <MenuItem 
+                    value={category} 
+                    key={index} 
+                  >
+                    {capitalizedString(category)}
+                  </MenuItem>
+                )}
+              </Select>
+              <FormHelperText>
+                {dropdownError ? 'Must choose a category' : ''}
+              </FormHelperText>
+            </FormControl>
+            <Button 
+              variant="contained"
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
+          </form>
+        : ''
+      }
+    </Fragment>
   )
 }
 
-const mapStatesToProps = ({ categories }) => {
+const mapStatesToProps = ({ categories, appStatus }, { location }) => {
+  let initialDropdown = ''
+  if (location.search !== '') {
+    const query = new URLSearchParams(location.search)
+    initialDropdown = query.get('category')
+  }
+
   return { 
-    categories: categories.map(category => category.name)
+    initialDropdown,
+    categories: categories.map(category => category.name),
+    areCategoriesReady: appStatus.areCategoriesReady
   }
 }
 
-export default connect(mapStatesToProps)(CreatePost)
+export default withRouter(connect(mapStatesToProps)(CreatePost)) 

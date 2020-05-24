@@ -24,7 +24,7 @@ function PostList(props) {
       <Button 
         variant="contained"
         component={Link} 
-        to="/posts/new"
+        to={category === '' ? '/posts/new' : `/posts/new?category=${category}`}
       >
         Add Post
       </Button>
