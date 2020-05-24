@@ -10,7 +10,10 @@ import {
   FormControl,
   FormHelperText,
   InputLabel,
-  Button
+  Button,
+  Typography,
+  Container,
+  Grid
 } from '@material-ui/core';
 import uniqid from 'uniqid'
 
@@ -18,9 +21,14 @@ import { capitalizedString } from '../utils/helper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    width: '60%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+
     '& > *': {
       margin: theme.spacing(1),
-      width: '25ch',
+      // width: '25ch',
     },
   },
   formControl: {
@@ -29,7 +37,11 @@ const useStyles = makeStyles((theme) => ({
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
+    textAlign: 'left'
   },
+  button: {
+    marginTop: theme.spacing(2),
+  }
 }));
 
 const validateInput = (input, setInputError) => {
@@ -76,10 +88,14 @@ function CreatePost(props) {
     return validateTitle && validateBody && validateAuthor && validateDropdown
   }
 
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false)
+
   const handleSubmit = () => {
     const isFormValid = validateForm()
 
     if (isFormValid) {
+      setIsButtonDisabled(true)
+
       const post = {
         id: uniqid(),
         timestamp: Date.now(),
@@ -90,84 +106,106 @@ function CreatePost(props) {
       }
 
       ReadableAPI.addPost(post)
-        .then(() => alert('Post has been added successfully!'))
-        .catch(err => alert(err))
+        .then(() => {
+          alert('Post has been added successfully!')
+
+          setTitle('')
+          setBody('')
+          setAuthor('')
+          setDropdown('')
+          setIsButtonDisabled(false)
+        })
+        .catch(err => {
+          alert(err)
+          setIsButtonDisabled(false)
+        })
     }
   }
   
   return (
-    <Fragment>
-      {areCategoriesReady
-        ? <form className={classes.root} noValidate autoComplete="off">
-            <TextField 
-            error={titleError}
-            required 
-            label="Title" 
-            onBlur={() => handleBlur(title, setTitleError)} 
-            value={title}
-            onChange={handleTitleChange}
-            helperText={titleError ? 'Cannot be blank!' : ''}
-          />
-            <TextField 
-              error={bodyError}
-              required 
-              label="Body" 
-              onBlur={() => handleBlur(body, setBodyError)} 
-              value={body}
-              onChange={handleBodyChange}
-              helperText={bodyError ? 'Cannot be blank!' : ''}
-            />
-            <TextField 
-              error={authorError}
-              required 
-              label="Author"
-              onBlur={() => handleBlur(author, setAuthorError)} 
-              value={author}
-              onChange={handleAuthorChange}
-              helperText={authorError ? 'Cannot be blank!' : ''} 
-            />
-            <FormControl 
-              className={classes.formControl} 
-              error={dropdownError}
-              required
-            >
-              <InputLabel shrink id="create-dropdown">
-                Category
-              </InputLabel>
-              <Select 
-                labelId="create-dropdown"
-                value={dropdown}
-                displayEmpty
-                className={classes.selectEmpty}
-                onChange={handleDropdownChange}
-                onBlur={() => handleBlur(dropdown, setDropdownError)}
+    <Container maxWidth="lg" >
+      <Grid container justify="center">
+        {areCategoriesReady
+          ? <form className={classes.root} noValidate autoComplete="off">
+              <TextField 
+                fullWidth
+                error={titleError}
+                required 
+                label="Title" 
+                onBlur={() => handleBlur(title, setTitleError)} 
+                value={title}
+                onChange={handleTitleChange}
+                helperText={titleError ? 'Cannot be blank!' : ''}
+              />
+              <TextField 
+                fullWidth
+                error={bodyError}
+                required 
+                label="Body" 
+                onBlur={() => handleBlur(body, setBodyError)} 
+                value={body}
+                onChange={handleBodyChange}
+                helperText={bodyError ? 'Cannot be blank!' : ''}
+                multiline
+                rows={4}
+              />
+              <TextField 
+                fullWidth
+                error={authorError}
+                required 
+                label="Author"
+                onBlur={() => handleBlur(author, setAuthorError)} 
+                value={author}
+                onChange={handleAuthorChange}
+                helperText={authorError ? 'Cannot be blank!' : ''} 
+              />
+              <FormControl 
+                className={classes.formControl} 
+                error={dropdownError}
+                required
+                fullWidth
               >
-                <MenuItem value="">
-                  <em>Choose A Category</em>
-                </MenuItem>
-                {categories.map((category, index) => 
-                  <MenuItem 
-                    value={category} 
-                    key={index} 
-                  >
-                    {capitalizedString(category)}
+                <InputLabel shrink id="create-dropdown">
+                  Category
+                </InputLabel>
+                <Select 
+                  labelId="create-dropdown"
+                  value={dropdown}
+                  displayEmpty
+                  className={classes.selectEmpty}
+                  onChange={handleDropdownChange}
+                  onBlur={() => handleBlur(dropdown, setDropdownError)}
+                >
+                  <MenuItem value="">
+                    <em>Choose A Category</em>
                   </MenuItem>
-                )}
-              </Select>
-              <FormHelperText>
-                {dropdownError ? 'Must choose a category' : ''}
-              </FormHelperText>
-            </FormControl>
-            <Button 
-              variant="contained"
-              onClick={handleSubmit}
-            >
-              Submit
-            </Button>
-          </form>
-        : ''
-      }
-    </Fragment>
+                  {categories.map((category, index) => 
+                    <MenuItem 
+                      value={category} 
+                      key={index} 
+                    >
+                      {capitalizedString(category)}
+                    </MenuItem>
+                  )}
+                </Select>
+                <FormHelperText>
+                  {dropdownError ? 'Must choose a category' : ''}
+                </FormHelperText>
+              </FormControl>
+              <Button 
+                fullWidth
+                variant="contained"
+                onClick={handleSubmit}
+                className={classes.button}
+                disabled={isButtonDisabled}
+              >
+                Submit
+              </Button>
+            </form>
+          : <Typography variant="h4">Loading...</Typography>
+        }
+      </Grid>
+    </Container>
   )
 }
 

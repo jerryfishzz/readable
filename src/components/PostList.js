@@ -1,7 +1,13 @@
 import React, { useEffect, Fragment } from 'react'
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom'
-import { Typography, Button } from '@material-ui/core';
+import { 
+  makeStyles,
+  Typography, 
+  Button,
+  Container,
+  Grid
+} from '@material-ui/core';
 
 import CategoryDropDown from './CategoryDropDown';
 import PostTable from './PostTable';
@@ -9,7 +15,25 @@ import SortDropDown from './SortDropDown';
 import { handleGetPosts } from '../actions/posts';
 import { getPostsReady } from '../actions/appStatus';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+      // width: '25ch',
+    },
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
+
 function PostList(props) {
+  const classes = useStyles();
+
   const { currentCatObjString, arePostsReady, category, handleGetPosts, getPostsReady } = props
 
   useEffect(() => {
@@ -19,15 +43,17 @@ function PostList(props) {
   }, [])
 
   return (
-    <Fragment>
-      <CategoryDropDown />
-      <Button 
-        variant="contained"
-        component={Link} 
-        to={category === '' ? '/posts/new' : `/posts/new?category=${category}`}
-      >
-        Add Post
-      </Button>
+    <Container maxWidth="lg" className={classes.root}>
+      <Grid container justify="space-between" alignItems="center">
+        <CategoryDropDown />
+        <Button 
+          variant="contained"
+          component={Link} 
+          to={category === '' ? '/posts/new' : `/posts/new?category=${category}`}
+        >
+          Add Post
+        </Button>
+      </Grid>
       <p className="App-intro">
         To get started, edit <code>src/App.js</code> and save to reload.
       </p>
@@ -35,12 +61,14 @@ function PostList(props) {
         Talking to the backend yields these categories: <br />
         {currentCatObjString}
       </p>
-      <SortDropDown />
+      <Grid container justify="flex-end">
+        <SortDropDown />
+      </Grid>
       {arePostsReady
         ? <PostTable />
         : <Typography variant="h4">Loading...</Typography>
       }
-    </Fragment>
+    </Container>
   )
 }
 
