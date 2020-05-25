@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left'
   },
   button: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(3),
   },
   title: {
     flex: 1

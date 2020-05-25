@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  navigation: {
+    width: '60%'
+  }
 }));
 
 function PostList(props) {
@@ -44,15 +47,17 @@ function PostList(props) {
 
   return (
     <Container maxWidth="lg" className={classes.root}>
-      <Grid container justify="space-between" alignItems="center">
-        <CategoryDropDown />
-        <Button 
-          variant="contained"
-          component={Link} 
-          to={category === '' ? '/posts/new' : `/posts/new?category=${category}`}
-        >
-          Add Post
-        </Button>
+      <Grid container justify="center" alignItems="center">
+        <Grid item container justify="space-between" alignItems="center" className={classes.navigation}>
+          <CategoryDropDown />
+          <Button 
+            variant="contained"
+            component={Link} 
+            to={category === '' ? '/posts/new' : `/posts/new?category=${category}`}
+          >
+            Add Post
+          </Button>
+        </Grid>
       </Grid>
       <p className="App-intro">
         To get started, edit <code>src/App.js</code> and save to reload.
