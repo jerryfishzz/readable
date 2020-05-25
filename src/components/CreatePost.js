@@ -1,7 +1,7 @@
 import * as ReadableAPI from '../utils/api'
-import React, { Fragment, useState } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import { 
   makeStyles, 
   TextField,
@@ -13,8 +13,10 @@ import {
   Button,
   Typography,
   Container,
-  Grid
+  Grid,
+  IconButton
 } from '@material-ui/core';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import uniqid from 'uniqid'
 
 import { capitalizedString } from '../utils/helper';
@@ -25,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    paddingTop: theme.spacing(2),
 
     '& > *': {
       margin: theme.spacing(1),
@@ -41,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     marginTop: theme.spacing(2),
+  },
+  title: {
+    flex: 1
   }
 }));
 
@@ -127,6 +133,11 @@ function CreatePost(props) {
       <Grid container justify="center">
         {areCategoriesReady
           ? <form className={classes.root} noValidate autoComplete="off">
+              <Grid container alignItems="center">
+                <ArrowBackIosIcon />
+                <Button component={Link} to={`/${initialDropdown}`}>Post List</Button>
+              </Grid>
+              <Typography variant="h5" align="right" className={classes.title}>ADD POST</Typography>
               <TextField 
                 fullWidth
                 error={titleError}
@@ -147,7 +158,7 @@ function CreatePost(props) {
                 onChange={handleBodyChange}
                 helperText={bodyError ? 'Cannot be blank!' : ''}
                 multiline
-                rows={4}
+                rows={2}
               />
               <TextField 
                 fullWidth
@@ -198,6 +209,7 @@ function CreatePost(props) {
                 onClick={handleSubmit}
                 className={classes.button}
                 disabled={isButtonDisabled}
+                color="primary"
               >
                 Submit
               </Button>
