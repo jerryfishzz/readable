@@ -148,28 +148,6 @@ function CreatePost(props) {
                 onChange={handleTitleChange}
                 helperText={titleError ? 'Cannot be blank!' : ''}
               />
-              <TextField 
-                fullWidth
-                error={bodyError}
-                required 
-                label="Body" 
-                onBlur={() => handleBlur(body, setBodyError)} 
-                value={body}
-                onChange={handleBodyChange}
-                helperText={bodyError ? 'Cannot be blank!' : ''}
-                multiline
-                rows={2}
-              />
-              <TextField 
-                fullWidth
-                error={authorError}
-                required 
-                label="Author"
-                onBlur={() => handleBlur(author, setAuthorError)} 
-                value={author}
-                onChange={handleAuthorChange}
-                helperText={authorError ? 'Cannot be blank!' : ''} 
-              />
               <FormControl 
                 className={classes.formControl} 
                 error={dropdownError}
@@ -203,6 +181,30 @@ function CreatePost(props) {
                   {dropdownError ? 'Must choose a category' : ''}
                 </FormHelperText>
               </FormControl>
+              <TextField 
+                fullWidth
+                error={authorError}
+                required 
+                label="Author"
+                onBlur={() => handleBlur(author, setAuthorError)} 
+                value={author}
+                onChange={handleAuthorChange}
+                helperText={authorError ? 'Cannot be blank!' : ''} 
+              />
+              <TextField 
+                fullWidth
+                error={bodyError}
+                required 
+                label="Body" 
+                onBlur={() => handleBlur(body, setBodyError)} 
+                value={body}
+                onChange={handleBodyChange}
+                helperText={bodyError ? 'Cannot be blank!' : ''}
+                multiline
+                rows={2}
+              />
+              
+              
               <Button 
                 fullWidth
                 variant="contained"
