@@ -14,7 +14,6 @@ import {
   Typography,
   Container,
   Grid,
-  IconButton
 } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import uniqid from 'uniqid'
@@ -35,8 +34,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
+    paddingLeft: theme.spacing(1),
+    flex: 1
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -45,7 +44,11 @@ const useStyles = makeStyles((theme) => ({
   button: {
     marginTop: theme.spacing(3),
   },
-  title: {
+  flexExpand: {
+    
+  },
+  author: {
+    paddingRight: theme.spacing(1),
     flex: 1
   }
 }));
@@ -137,7 +140,7 @@ function CreatePost(props) {
                 <ArrowBackIosIcon />
                 <Button component={Link} to={`/${initialDropdown}`}>Post List</Button>
               </Grid>
-              <Typography variant="h5" align="right" className={classes.title}>ADD POST</Typography>
+              <Typography variant="h5" align="right">ADD POST</Typography>
               <TextField 
                 fullWidth
                 error={titleError}
@@ -148,49 +151,51 @@ function CreatePost(props) {
                 onChange={handleTitleChange}
                 helperText={titleError ? 'Cannot be blank!' : ''}
               />
-              <FormControl 
-                className={classes.formControl} 
-                error={dropdownError}
-                required
-                fullWidth
-              >
-                <InputLabel shrink id="create-dropdown">
-                  Category
-                </InputLabel>
-                <Select 
-                  labelId="create-dropdown"
-                  value={dropdown}
-                  displayEmpty
-                  className={classes.selectEmpty}
-                  onChange={handleDropdownChange}
-                  onBlur={() => handleBlur(dropdown, setDropdownError)}
+              <Grid container> 
+                <TextField
+                  error={authorError}
+                  required 
+                  label="Author"
+                  onBlur={() => handleBlur(author, setAuthorError)} 
+                  value={author}
+                  onChange={handleAuthorChange}
+                  helperText={authorError ? 'Cannot be blank!' : ''} 
+                  className={classes.author}
+                />
+                <FormControl 
+                  className={classes.formControl} 
+                  error={dropdownError}
+                  required
                 >
-                  <MenuItem value="">
-                    <em>Choose A Category</em>
-                  </MenuItem>
-                  {categories.map((category, index) => 
-                    <MenuItem 
-                      value={category} 
-                      key={index} 
-                    >
-                      {capitalizedString(category)}
+                  <InputLabel shrink id="create-dropdown">
+                    Category
+                  </InputLabel>
+                  <Select 
+                    labelId="create-dropdown"
+                    value={dropdown}
+                    displayEmpty
+                    className={classes.selectEmpty}
+                    onChange={handleDropdownChange}
+                    onBlur={() => handleBlur(dropdown, setDropdownError)}
+                  >
+                    <MenuItem value="">
+                      <em>Choose A Category</em>
                     </MenuItem>
-                  )}
-                </Select>
-                <FormHelperText>
-                  {dropdownError ? 'Must choose a category' : ''}
-                </FormHelperText>
-              </FormControl>
-              <TextField 
-                fullWidth
-                error={authorError}
-                required 
-                label="Author"
-                onBlur={() => handleBlur(author, setAuthorError)} 
-                value={author}
-                onChange={handleAuthorChange}
-                helperText={authorError ? 'Cannot be blank!' : ''} 
-              />
+                    {categories.map((category, index) => 
+                      <MenuItem 
+                        value={category} 
+                        key={index} 
+                      >
+                        {capitalizedString(category)}
+                      </MenuItem>
+                    )}
+                  </Select>
+                  <FormHelperText>
+                    {dropdownError ? 'Must choose a category' : ''}
+                  </FormHelperText>
+                </FormControl>
+              </Grid>
+              
               <TextField 
                 fullWidth
                 error={bodyError}

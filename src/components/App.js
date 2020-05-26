@@ -10,6 +10,7 @@ import Header from './Header';
 import { getCategoriesReady } from '../actions/appStatus';
 import { handleGetCategories } from '../actions/categories';
 import CreatePost from './CreatePost';
+import Post from './Post';
 
 function App(props) {
   useEffect(() => { 
@@ -33,6 +34,7 @@ function App(props) {
                   <Route key={category.path} path={`/${category.path}`} component={PostList} />
                 )}
                 <Route path='/posts/new' component={CreatePost} />
+                <Route path='/posts/:pid' component={Post} />
               </Switch>
             : <Typography variant="h4">Loading...</Typography>
           }

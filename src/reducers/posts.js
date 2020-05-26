@@ -4,7 +4,8 @@ import {
   DOWN_VOTE, 
   DELETE_POST, 
   RESTORE_POST, 
-  ADD_POST
+  ADD_POST,
+  UPDATE_POST
 } from "../actions/posts"
 
 export default function posts(state = [], action) {
@@ -53,6 +54,13 @@ export default function posts(state = [], action) {
       })
     case ADD_POST:
       return [...state, action.post]
+    case UPDATE_POST:
+      return state.map(post => {
+        if (post.id === action.post.id) {
+          return action.post
+        }
+        return post
+      })
     default:
       return state
   }

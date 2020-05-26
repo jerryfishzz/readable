@@ -6,6 +6,7 @@ export const DOWN_VOTE = 'DOWN_VOTE'
 export const DELETE_POST = 'DELETE_POST'
 export const RESTORE_POST = 'RESTORE_POST'
 export const ADD_POST = 'ADD_POST'
+export const UPDATE_POST = 'UPDATE_POST'
 
 function getPosts(posts) {
   return {
@@ -101,5 +102,27 @@ export function handleAddPost(post) {
   return dispatch => {
     return ReadableAPI.addPost(post)
       .then(res => dispatch(addPost(res)))
+  }
+}
+
+function updatePost(post) {
+  return {
+    type: UPDATE_POST,
+    post
+  }
+}
+
+export function handleGetPost(pid) {
+  return (dispatch, getState) => {
+    return ReadableAPI.getPost(pid)
+      .then(res => {
+        console.log(res)
+        // const { posts } = getState()
+        // const pids = posts.map(post => post.id)
+
+        // if (pids.indexOf(pid) === -1) {
+        //   dispatch(addPost(res))
+        // }
+      })
   }
 }

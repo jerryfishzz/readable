@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -72,7 +72,7 @@ function PostTable(props) {
                 !post.deleted && (
                   <TableRow key={post.id}>
                     <TableCell component="th" scope="row">
-                      {post.title}
+                      <Link to={`/posts/${post.id}`}>{post.title}</Link>
                     </TableCell>
                     <TableCell align="right">{post.body}</TableCell>
                     <TableCell align="right">{post.author}</TableCell>

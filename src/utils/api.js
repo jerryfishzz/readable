@@ -72,3 +72,14 @@ export function addPost(post) {
     return res.data
   })
 }
+
+export function getPost(pid) {
+  const url = `${baseURL}/posts/${pid}`
+
+  console.log('getting a post from url', url)
+  return Axios({
+    method: 'post',
+    url,
+    headers: {'Authorization': 'whatever-you-want'},
+  }).then(res => res.data)
+}
