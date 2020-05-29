@@ -117,12 +117,10 @@ export function handleGetPost(pid) {
     return ReadableAPI.getPost(pid)
       .then(res => {
         console.log(res)
-        // const { posts } = getState()
-        // const pids = posts.map(post => post.id)
+        const { posts } = getState()
+        const pids = posts.map(post => post.id)
 
-        // if (pids.indexOf(pid) === -1) {
-        //   dispatch(addPost(res))
-        // }
+        return pids.indexOf(pid) === -1 ? dispatch(addPost(res)) : dispatch(updatePost(res))
       })
   }
 }

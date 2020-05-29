@@ -82,7 +82,7 @@ function CreatePost(props) {
   const [authorError, setAuthorError] = useState(false)
   const handleAuthorChange = handleChange(setAuthor, setAuthorError)
 
-  const { categories, initialDropdown, areCategoriesReady } = props
+  const { categories, initialDropdown } = props
 
   const [dropdown, setDropdown] = useState(initialDropdown)
   const [dropdownError, setDropdownError] = useState(false)
@@ -134,95 +134,89 @@ function CreatePost(props) {
   return (
     <Container maxWidth="lg" >
       <Grid container justify="center">
-        {areCategoriesReady
-          ? <form className={classes.root} noValidate autoComplete="off">
-              <Grid container alignItems="center">
-                <ArrowBackIosIcon />
-                <Button component={Link} to={`/${initialDropdown}`}>Post List</Button>
-              </Grid>
-              <Typography variant="h5" align="right">ADD POST</Typography>
-              <TextField 
-                fullWidth
-                error={titleError}
-                required 
-                label="Title" 
-                onBlur={() => handleBlur(title, setTitleError)} 
-                value={title}
-                onChange={handleTitleChange}
-                helperText={titleError ? 'Cannot be blank!' : ''}
-              />
-              <Grid container> 
-                <TextField
-                  error={authorError}
-                  required 
-                  label="Author"
-                  onBlur={() => handleBlur(author, setAuthorError)} 
-                  value={author}
-                  onChange={handleAuthorChange}
-                  helperText={authorError ? 'Cannot be blank!' : ''} 
-                  className={classes.author}
-                />
-                <FormControl 
-                  className={classes.formControl} 
-                  error={dropdownError}
-                  required
-                >
-                  <InputLabel shrink id="create-dropdown">
-                    Category
-                  </InputLabel>
-                  <Select 
-                    labelId="create-dropdown"
-                    value={dropdown}
-                    displayEmpty
-                    className={classes.selectEmpty}
-                    onChange={handleDropdownChange}
-                    onBlur={() => handleBlur(dropdown, setDropdownError)}
-                  >
-                    <MenuItem value="">
-                      <em>Choose A Category</em>
-                    </MenuItem>
-                    {categories.map((category, index) => 
-                      <MenuItem 
-                        value={category} 
-                        key={index} 
-                      >
-                        {capitalizedString(category)}
-                      </MenuItem>
-                    )}
-                  </Select>
-                  <FormHelperText>
-                    {dropdownError ? 'Must choose a category' : ''}
-                  </FormHelperText>
-                </FormControl>
-              </Grid>
-              
-              <TextField 
-                fullWidth
-                error={bodyError}
-                required 
-                label="Body" 
-                onBlur={() => handleBlur(body, setBodyError)} 
-                value={body}
-                onChange={handleBodyChange}
-                helperText={bodyError ? 'Cannot be blank!' : ''}
-                multiline
-                rows={2}
-              />
-              
-              
-              <Button 
-                fullWidth
-                variant="contained"
-                onClick={handleSubmit}
-                className={classes.button}
-                disabled={isButtonDisabled}
-                color="primary"
+        <form className={classes.root} noValidate autoComplete="off">
+          <Grid container alignItems="center">
+            <ArrowBackIosIcon />
+            <Button component={Link} to={`/${initialDropdown}`}>Post List</Button>
+          </Grid>
+          <Typography variant="h5" align="right">ADD POST</Typography>
+          <TextField 
+            fullWidth
+            error={titleError}
+            required 
+            label="Title" 
+            onBlur={() => handleBlur(title, setTitleError)} 
+            value={title}
+            onChange={handleTitleChange}
+            helperText={titleError ? 'Cannot be blank!' : ''}
+          />
+          <Grid container> 
+            <TextField
+              error={authorError}
+              required 
+              label="Author"
+              onBlur={() => handleBlur(author, setAuthorError)} 
+              value={author}
+              onChange={handleAuthorChange}
+              helperText={authorError ? 'Cannot be blank!' : ''} 
+              className={classes.author}
+            />
+            <FormControl 
+              className={classes.formControl} 
+              error={dropdownError}
+              required
+            >
+              <InputLabel shrink id="create-dropdown">
+                Category
+              </InputLabel>
+              <Select 
+                labelId="create-dropdown"
+                value={dropdown}
+                displayEmpty
+                className={classes.selectEmpty}
+                onChange={handleDropdownChange}
+                onBlur={() => handleBlur(dropdown, setDropdownError)}
               >
-                Submit
-              </Button>
-            </form>
-          : <Typography variant="h4">Loading...</Typography>
-        }
+                <MenuItem value="">
+                  <em>Choose A Category</em>
+                </MenuItem>
+                {categories.map((category, index) => 
+                  <MenuItem 
+                    value={category} 
+                    key={index} 
+                  >
+                    {capitalizedString(category)}
+                  </MenuItem>
+                )}
+              </Select>
+              <FormHelperText>
+                {dropdownError ? 'Must choose a category' : ''}
+              </FormHelperText>
+            </FormControl>
+          </Grid>
+          <TextField 
+            fullWidth
+            error={bodyError}
+            required 
+            label="Body" 
+            onBlur={() => handleBlur(body, setBodyError)} 
+            value={body}
+            onChange={handleBodyChange}
+            helperText={bodyError ? 'Cannot be blank!' : ''}
+            multiline
+            rows={2}
+          />
+          <Button 
+            fullWidth
+            variant="contained"
+            onClick={handleSubmit}
+            className={classes.button}
+            disabled={isButtonDisabled}
+            color="primary"
+          >
+            Submit
+          </Button>
+        </form>
       </Grid>
     </Container>
   )
@@ -238,7 +232,6 @@ const mapStatesToProps = ({ categories, appStatus }, { location }) => {
   return { 
     initialDropdown,
     categories: categories.map(category => category.name),
-    areCategoriesReady: appStatus.areCategoriesReady
   }
 }
 
