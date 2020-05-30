@@ -78,7 +78,7 @@ export function getPost(pid) {
 
   console.log('getting a post from url', url)
   return Axios({
-    method: 'post',
+    method: 'get',
     url,
     headers: {'Authorization': 'whatever-you-want'},
   }).then(res => res.data)
