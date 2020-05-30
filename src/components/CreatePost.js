@@ -14,8 +14,9 @@ import {
   Typography,
   Container,
   Grid,
+  IconButton
 } from '@material-ui/core';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import uniqid from 'uniqid'
 
 import { capitalizedString } from '../utils/helper';
@@ -23,14 +24,12 @@ import { capitalizedString } from '../utils/helper';
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '60%',
-    display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     paddingTop: theme.spacing(2),
 
     '& > *': {
       margin: theme.spacing(1),
-      // width: '25ch',
     },
   },
   formControl: {
@@ -44,8 +43,8 @@ const useStyles = makeStyles((theme) => ({
   button: {
     marginTop: theme.spacing(3),
   },
-  flexExpand: {
-    
+  margin: {
+    marginLeft: theme.spacing(1)
   },
   author: {
     paddingRight: theme.spacing(1),
@@ -136,10 +135,12 @@ function CreatePost(props) {
       <Grid container justify="center">
         <form className={classes.root} noValidate autoComplete="off">
           <Grid container alignItems="center">
-            <ArrowBackIosIcon />
-            <Button component={Link} to={`/${initialDropdown}`}>Post List</Button>
+            <IconButton component={Link} to={`/${initialDropdown}`}>
+              <NavigateBeforeIcon />
+            </IconButton>
+            <Typography className={classes.margin} variant="button">Back to Post List</Typography>
           </Grid>
-          <Typography variant="h5" align="right">ADD POST</Typography>
+          <Typography variant="h5" align="center">ADD POST</Typography>
           <TextField 
             fullWidth
             error={titleError}

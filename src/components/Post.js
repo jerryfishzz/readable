@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom'
 import { 
   makeStyles, 
-  Button,
   Typography,
   Container,
   Grid,
+  IconButton
 } from '@material-ui/core';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 
 import { handleGetPost } from '../actions/posts';
 import PostCard from './PostCard';
@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     }
   },
+  margin: {
+    marginLeft: theme.spacing(1),
+  }
 }));
 
 function Post(props) {
@@ -41,8 +44,10 @@ function Post(props) {
         {isPostReady
           ? <Grid item container className={classes.root}>
               <Grid item container alignItems="center">
-                <ArrowBackIosIcon />
-                <Button component={Link} to={`/${post.category}`}>Back to category</Button>
+                <IconButton component={Link} to={`/${post.category}`}>
+                  <NavigateBeforeIcon />
+                </IconButton>
+                <Typography variant="button" className={classes.margin}>Back to category</Typography>
               </Grid>
               <PostCard post={post} />
             </Grid>
