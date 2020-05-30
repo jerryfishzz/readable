@@ -3,8 +3,11 @@ import {
   makeStyles, 
   Typography,
   Grid,
-  Paper
+  Paper,
+  IconButton
 } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles((theme) => ({
   generalMargin: {
@@ -18,12 +21,19 @@ const useStyles = makeStyles((theme) => ({
       paddingRight: theme.spacing(1),
     }
   },
+  padding: {
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
+  },
   title: {
     fontWeight: 700
   },
   paper: {
     width: '100%',
     padding: theme.spacing(1),
+  },
+  flexExtend: {
+    flex: 1
   }
 }));
 
@@ -34,8 +44,10 @@ function PostCard(props) {
   return (
     <Paper className={classes.paper}>
       <Grid container className={classes.generalMargin}>
-        <Grid item container className={classes.sidePadding}>
-          <Typography variant="h5" align="left">{post.title}</Typography>
+        <Grid item container alignItems="center">
+          <Typography variant="h5" align="left" className={`${classes.flexExtend} ${classes.padding}`}>{post.title}</Typography>
+          <IconButton><EditIcon /></IconButton>
+          <IconButton><DeleteIcon /></IconButton>
         </Grid>
         <Grid item container alignItems="center">
           <Grid item container xs alignItems="center" className={classes.sidePadding}>
