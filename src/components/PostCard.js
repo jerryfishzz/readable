@@ -3,7 +3,6 @@ import {
   makeStyles, 
   Typography,
   Grid,
-  Paper,
   IconButton
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
@@ -28,10 +27,6 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontWeight: 700
   },
-  paper: {
-    width: '100%',
-    padding: theme.spacing(1),
-  },
   flexExtend: {
     flex: 1
   }
@@ -39,31 +34,55 @@ const useStyles = makeStyles((theme) => ({
 
 function PostCard(props) {
   const classes = useStyles();
-  const { post } = props
+  const { post, setIsEditable } = props
+
+  const handleEdit = () => setIsEditable(true)
 
   return (
-    <Paper className={classes.paper}>
-      <Grid container className={classes.generalMargin}>
-        <Grid item container alignItems="center">
-          <Typography variant="h5" align="left" className={`${classes.flexExtend} ${classes.padding}`}>{post.title}</Typography>
-          <IconButton><EditIcon /></IconButton>
-          <IconButton><DeleteIcon /></IconButton>
+    <Grid container className={classes.generalMargin}>
+      <Grid item container alignItems="center">
+        <Typography 
+          variant="h5" 
+          align="left" 
+          className={`${classes.flexExtend} ${classes.padding}`}
+        >
+          {post.title}
+        </Typography>
+        <IconButton onClick={handleEdit}>
+          <EditIcon />
+        </IconButton>
+        <IconButton><DeleteIcon /></IconButton>
+      </Grid>
+      <Grid item container alignItems="center">
+        <Grid 
+          item 
+          container 
+          xs 
+          alignItems="center" 
+          className={classes.sidePadding}
+        >
+          <Typography variant="subtitle1" className={classes.title}>
+            Author
+          </Typography>
+          <Typography variant="body1">{post.author}</Typography>
         </Grid>
-        <Grid item container alignItems="center">
-          <Grid item container xs alignItems="center" className={classes.sidePadding}>
-            <Typography variant="subtitle1" className={classes.title}>Author</Typography>
-            <Typography variant="body1">{post.author}</Typography>
-          </Grid>
-          <Grid item container xs alignItems="center" className={classes.sidePadding}>
-            <Typography variant="subtitle1" className={classes.title}>Category</Typography>
-            <Typography variant="body1">{post.category}</Typography>
-          </Grid>
-        </Grid>
-        <Grid item container className={classes.sidePadding}>
-          <Typography variant="body1" align="left">{post.body}</Typography>
+        <Grid 
+          item 
+          container 
+          xs 
+          alignItems="center" 
+          className={classes.sidePadding}
+        >
+          <Typography variant="subtitle1" className={classes.title}>
+            Category
+          </Typography>
+          <Typography variant="body1">{post.category}</Typography>
         </Grid>
       </Grid>
-    </Paper>
+      <Grid item container className={classes.sidePadding}>
+        <Typography variant="body1" align="left">{post.body}</Typography>
+      </Grid>
+    </Grid>
   )
 }
 

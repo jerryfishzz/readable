@@ -11,7 +11,7 @@ import {
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 
 import { handleGetPost } from '../actions/posts';
-import PostCard from './PostCard';
+import PostPaper from './PostPaper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,7 +49,7 @@ function Post(props) {
                 </IconButton>
                 <Typography variant="button" className={classes.margin}>Back to category</Typography>
               </Grid>
-              <PostCard post={post} />
+              <PostPaper post={post} />
             </Grid>
           : <Typography variant="h4">Loading...</Typography>
         }

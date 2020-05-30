@@ -223,7 +223,7 @@ function CreatePost(props) {
   )
 }
 
-const mapStatesToProps = ({ categories, appStatus }, { location }) => {
+const mapStatesToProps = ({ categories }, { location }) => {
   let initialDropdown = ''
   if (location.search !== '') {
     const query = new URLSearchParams(location.search)
