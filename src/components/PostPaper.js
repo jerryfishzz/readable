@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { makeStyles, Paper } from '@material-ui/core';
 
 import PostCard from './PostCard';
+import PostForm from './PostForm';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -17,12 +18,12 @@ function PostPaper(props) {
 
   return (
     <Paper className={classes.paper}>
-      {!isEditable
+      {post && !isEditable
         ? <PostCard 
             post={post}
             setIsEditable={setIsEditable}
           />
-        : <p>form</p>
+        : <PostForm post={post} />
       }
     </Paper>
   )

@@ -1,229 +1,54 @@
-import * as ReadableAPI from '../utils/api'
-import React, { useState } from 'react'
+import React from 'react'
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom'
 import { 
-  makeStyles, 
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  Button,
+  makeStyles,
   Typography,
   Container,
   Grid,
   IconButton
 } from '@material-ui/core';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
-import uniqid from 'uniqid'
 
-import { capitalizedString } from '../utils/helper';
+import PostForm from './PostForm';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '60%',
-    flexDirection: 'column',
-    alignItems: 'center',
     paddingTop: theme.spacing(2),
 
     '& > *': {
       margin: theme.spacing(1),
     },
   },
-  formControl: {
-    paddingLeft: theme.spacing(1),
-    flex: 1
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-    textAlign: 'left'
-  },
-  button: {
-    marginTop: theme.spacing(3),
-  },
   margin: {
     marginLeft: theme.spacing(1)
   },
-  author: {
-    paddingRight: theme.spacing(1),
-    flex: 1
-  }
 }));
 
-const validateInput = (input, setInputError) => {
-  if (input === '') {
-    setInputError(true)
-    return false
-  }
-  return true
-}
 
 function CreatePost(props) {
   const classes = useStyles();
-
-  const handleChange = (setMethod, setInputError) => e => {
-    setMethod(e.target.value)
-    if(e.target.value !== '') setInputError(false)
-  }
-  const handleBlur = (input, setInputError) => input === '' ? setInputError(true) : setInputError(false)
-
-  const [title, setTitle] = useState('')
-  const [titleError, setTitleError] = useState(false)
-  const handleTitleChange = handleChange(setTitle, setTitleError)
-
-  const [body, setBody] = useState('')
-  const [bodyError, setBodyError] = useState(false)
-  const handleBodyChange = handleChange(setBody, setBodyError)
-
-  const [author, setAuthor] = useState('')
-  const [authorError, setAuthorError] = useState(false)
-  const handleAuthorChange = handleChange(setAuthor, setAuthorError)
-
-  const { categories, initialDropdown } = props
-
-  const [dropdown, setDropdown] = useState(initialDropdown)
-  const [dropdownError, setDropdownError] = useState(false)
-  const handleDropdownChange = handleChange(setDropdown, setDropdownError)
-
-  const validateForm = () => {
-    const validateTitle = validateInput(title, setTitleError)
-    const validateBody = validateInput(body, setBodyError)
-    const validateAuthor = validateInput(author, setAuthorError)
-    const validateDropdown = validateInput(dropdown, setDropdownError)
-
-    return validateTitle && validateBody && validateAuthor && validateDropdown
-  }
-
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false)
-
-  const handleSubmit = () => {
-    const isFormValid = validateForm()
-
-    if (isFormValid) {
-      setIsButtonDisabled(true)
-
-      const post = {
-        id: uniqid(),
-        timestamp: Date.now(),
-        title: title,
-        body: body,
-        author: author,
-        category: dropdown,
-      }
-
-      ReadableAPI.addPost(post)
-        .then(() => {
-          alert('Post has been added successfully!')
-
-          setTitle('')
-          setBody('')
-          setAuthor('')
-          setDropdown('')
-          setIsButtonDisabled(false)
-        })
-        .catch(err => {
-          alert(err)
-          setIsButtonDisabled(false)
-        })
-    }
-  }
+  const { initialDropdown } = props
   
   return (
     <Container maxWidth="lg" >
       <Grid container justify="center">
-        <form className={classes.root} noValidate autoComplete="off">
-          <Grid container alignItems="center">
+        <Grid item container direction="row" className={classes.root}>
+          <Grid item container alignItems="center">
             <IconButton component={Link} to={`/${initialDropdown}`}>
               <NavigateBeforeIcon />
             </IconButton>
             <Typography className={classes.margin} variant="button">Back to Post List</Typography>
           </Grid>
-          <Typography variant="h5" align="center">ADD POST</Typography>
-          <TextField 
-            fullWidth
-            error={titleError}
-            required 
-            label="Title" 
-            onBlur={() => handleBlur(title, setTitleError)} 
-            value={title}
-            onChange={handleTitleChange}
-            helperText={titleError ? 'Cannot be blank!' : ''}
-          />
-          <Grid container> 
-            <TextField
-              error={authorError}
-              required 
-              label="Author"
-              onBlur={() => handleBlur(author, setAuthorError)} 
-              value={author}
-              onChange={handleAuthorChange}
-              helperText={authorError ? 'Cannot be blank!' : ''} 
-              className={classes.author}
-            />
-            <FormControl 
-              className={classes.formControl} 
-              error={dropdownError}
-              required
-            >
-              <InputLabel shrink id="create-dropdown">
-                Category
-              </InputLabel>
-              <Select 
-                labelId="create-dropdown"
-                value={dropdown}
-                displayEmpty
-                className={classes.selectEmpty}
-                onChange={handleDropdownChange}
-                onBlur={() => handleBlur(dropdown, setDropdownError)}
-              >
-                <MenuItem value="">
-                  <em>Choose A Category</em>
-                </MenuItem>
-                {categories.map((category, index) => 
-                  <MenuItem 
-                    value={category} 
-                    key={index} 
-                  >
-                    {capitalizedString(category)}
-                  </MenuItem>
-                )}
-              </Select>
-              <FormHelperText>
-                {dropdownError ? 'Must choose a category' : ''}
-              </FormHelperText>
-            </FormControl>
-          </Grid>
-          <TextField 
-            fullWidth
-            error={bodyError}
-            required 
-            label="Body" 
-            onBlur={() => handleBlur(body, setBodyError)} 
-            value={body}
-            onChange={handleBodyChange}
-            helperText={bodyError ? 'Cannot be blank!' : ''}
-            multiline
-            rows={2}
-          />
-          <Button 
-            fullWidth
-            variant="contained"
-            onClick={handleSubmit}
-            className={classes.button}
-            disabled={isButtonDisabled}
-            color="primary"
-          >
-            Submit
-          </Button>
-        </form>
+          <PostForm />
+        </Grid>
       </Grid>
     </Container>
   )
 }
 
-const mapStatesToProps = ({ categories }, { location }) => {
+const mapStatesToProps = (state, { location }) => {
   let initialDropdown = ''
   if (location.search !== '') {
     const query = new URLSearchParams(location.search)
@@ -232,7 +57,6 @@ const mapStatesToProps = ({ categories }, { location }) => {
 
   return { 
     initialDropdown,
-    categories: categories.map(category => category.name),
   }
 }
 
