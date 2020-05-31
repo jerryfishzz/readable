@@ -124,9 +124,9 @@ export function handleGetPost(pid) {
   }
 }
 
-export function handleUpdatePost(post) {
+export function handleUpdatePost(pid, post) {
   return dispatch => {
-    return ReadableAPI.updatePost(post)
+    return ReadableAPI.updatePost(pid, post)
       .then(res => dispatch(updatePost(res)))
   }
 }
