@@ -48,10 +48,10 @@ function PostCard(props) {
         >
           {post.title}
         </Typography>
-        <IconButton onClick={handleEdit}>
+        <IconButton color="primary" onClick={handleEdit}>
           <EditIcon />
         </IconButton>
-        <IconButton><DeleteIcon /></IconButton>
+        <IconButton color="secondary"><DeleteIcon /></IconButton>
       </Grid>
       <Grid item container alignItems="center">
         <Grid 

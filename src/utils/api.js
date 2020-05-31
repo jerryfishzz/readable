@@ -83,3 +83,15 @@ export function getPost(pid) {
     headers: {'Authorization': 'whatever-you-want'},
   }).then(res => res.data)
 }
+
+export function updatePost(pid, post) {
+  const url = `${baseURL}/posts/${pid}`
+
+  console.log('updating a post from url', url)
+  return Axios({
+    method: 'put',
+    url,
+    headers: {'Authorization': 'whatever-you-want'},
+    data: post
+  }).then(res => res.data)
+}

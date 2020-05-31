@@ -17,6 +17,7 @@ import {
 import uniqid from 'uniqid'
 
 import { capitalizedString } from '../utils/helper';
+import { handleUpdatePost } from '../actions/posts';
 
 const useStyles = makeStyles((theme) => ({
   generalMargin: {
@@ -32,8 +33,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     textAlign: 'left'
   },
-  button: {
-    marginTop: theme.spacing(3),
+  cancel: {
+    marginLeft: theme.spacing(1),
   },
   author: {
     paddingRight: theme.spacing(1),
@@ -44,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     padding: theme.spacing(1)
+  },
+  buttonContainer: {
+    marginTop: theme.spacing(2)
   }
 }));
 
@@ -57,6 +61,7 @@ const validateInput = (input, setInputError) => {
 
 function PostForm(props) {
   const classes = useStyles();
+  const { post, setIsEditable, handleUpdatePost } = props
 
   const handleChange = (setMethod, setInputError) => e => {
     setMethod(e.target.value)
@@ -64,20 +69,24 @@ function PostForm(props) {
   }
   const handleBlur = (input, setInputError) => input === '' ? setInputError(true) : setInputError(false)
 
-  const [title, setTitle] = useState('')
+  const initialTitle = post ? post.title : ''
+  const [title, setTitle] = useState(initialTitle)
   const [titleError, setTitleError] = useState(false)
   const handleTitleChange = handleChange(setTitle, setTitleError)
 
-  const [body, setBody] = useState('')
+  const initialBody = post ? post.body : ''
+  const [body, setBody] = useState(initialBody)
   const [bodyError, setBodyError] = useState(false)
   const handleBodyChange = handleChange(setBody, setBodyError)
 
-  const [author, setAuthor] = useState('')
+  const initialAuthor = post ? post.author : ''
+  const [author, setAuthor] = useState(initialAuthor)
   const [authorError, setAuthorError] = useState(false)
   const handleAuthorChange = handleChange(setAuthor, setAuthorError)
 
-  const { categories, initialDropdown } = props
+  const { categories, routerDropdown } = props
 
+  const initialDropdown = post ? post.category : routerDropdown
   const [dropdown, setDropdown] = useState(initialDropdown)
   const [dropdownError, setDropdownError] = useState(false)
   const handleDropdownChange = handleChange(setDropdown, setDropdownError)
@@ -99,36 +108,56 @@ function PostForm(props) {
     if (isFormValid) {
       setIsButtonDisabled(true)
 
-      const post = {
-        id: uniqid(),
-        timestamp: Date.now(),
-        title: title,
-        body: body,
-        author: author,
-        category: dropdown,
-      }
+      const submittedPost = post 
+        ? {
+            title: title,
+            body: body,
+          }
+        : {
+            id: uniqid(),
+            timestamp: Date.now(),
+            title: title,
+            body: body,
+            author: author,
+            category: dropdown,
+          }
 
-      ReadableAPI.addPost(post)
-        .then(() => {
-          alert('Post has been added successfully!')
+      !post 
+        ? ReadableAPI.addPost(submittedPost)
+            .then(() => {
+              alert('Post has been added successfully!')
 
-          setTitle('')
-          setBody('')
-          setAuthor('')
-          setDropdown('')
-          setIsButtonDisabled(false)
-        })
-        .catch(err => {
-          alert(err)
-          setIsButtonDisabled(false)
-        })
+              setTitle('')
+              setBody('')
+              setAuthor('')
+              setDropdown('')
+              setIsButtonDisabled(false)
+            })
+            .catch(err => {
+              alert(err)
+              setIsButtonDisabled(false)
+            })
+        : handleUpdatePost(post.id, submittedPost)
+            .then(() => {
+              alert('Post has been updated successfully!')
+              setIsButtonDisabled(false)
+            })
+            .catch(err => {
+              alert(err)
+              setIsButtonDisabled(false)
+            })
     }
   }
+
+  const handleCancel = () => setIsEditable(false)
 
   return (
     <form noValidate autoComplete="off" className={classes.form}>
       <Grid container className={classes.generalMargin}>
-        <Typography variant="h5" align="left" className={classes.title}>ADD POST</Typography>
+        {!post && 
+          <Typography variant="h5" align="left" className={classes.title}>
+            ADD POST
+          </Typography>}
         <TextField 
           fullWidth
           error={titleError}
@@ -144,6 +173,7 @@ function PostForm(props) {
             error={authorError}
             required 
             label="Author"
+            inputProps={post ? { readOnly: true } : {}}
             onBlur={() => handleBlur(author, setAuthorError)} 
             value={author}
             onChange={handleAuthorChange}
@@ -160,6 +190,7 @@ function PostForm(props) {
             </InputLabel>
             <Select 
               labelId="create-dropdown"
+              inputProps={post ? { readOnly: true } : {}}
               value={dropdown}
               displayEmpty
               className={classes.selectEmpty}
@@ -195,32 +226,43 @@ function PostForm(props) {
           multiline
           rows={2}
         />
-        <Button 
-          fullWidth
-          variant="contained"
-          onClick={handleSubmit}
-          className={classes.button}
-          disabled={isButtonDisabled}
-          color="primary"
-        >
-          Submit
-        </Button>
+        <Grid item container justify="flex-end" className={classes.buttonContainer}>
+          <Button 
+            fullWidth={!post}
+            variant="contained"
+            onClick={handleSubmit}
+            disabled={isButtonDisabled}
+            color="primary"
+          >
+            Submit
+          </Button>
+          {post && 
+            <Button 
+              variant="contained"
+              onClick={handleCancel}
+              color="secondary"
+              className={classes.cancel}
+              disabled={isButtonDisabled}
+            >
+              CANCEL
+            </Button>}
+        </Grid>
       </Grid>
     </form>
   )
 }
 
 const mapStatesToProps = ({ categories }, { location }) => {
-  let initialDropdown = ''
+  let routerDropdown = ''
   if (location.search !== '') {
     const query = new URLSearchParams(location.search)
-    initialDropdown = query.get('category')
+    routerDropdown = query.get('category')
   }
 
   return { 
-    initialDropdown,
+    routerDropdown,
     categories: categories.map(category => category.name),
   }
 }
 
-export default withRouter(connect(mapStatesToProps)(PostForm))
+export default withRouter(connect(mapStatesToProps, { handleUpdatePost })(PostForm))

@@ -19,11 +19,8 @@ function PostPaper(props) {
   return (
     <Paper className={classes.paper}>
       {post && !isEditable
-        ? <PostCard 
-            post={post}
-            setIsEditable={setIsEditable}
-          />
-        : <PostForm post={post} />
+        ? <PostCard post={post} setIsEditable={setIsEditable} />
+        : <PostForm post={post} setIsEditable={setIsEditable} />
       }
     </Paper>
   )

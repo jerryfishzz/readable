@@ -116,11 +116,17 @@ export function handleGetPost(pid) {
   return (dispatch, getState) => {
     return ReadableAPI.getPost(pid)
       .then(res => {
-        console.log(res)
         const { posts } = getState()
         const pids = posts.map(post => post.id)
 
         return pids.indexOf(pid) === -1 ? dispatch(addPost(res)) : dispatch(updatePost(res))
       })
+  }
+}
+
+export function handleUpdatePost(post) {
+  return dispatch => {
+    return ReadableAPI.updatePost(post)
+      .then(res => dispatch(updatePost(res)))
   }
 }
