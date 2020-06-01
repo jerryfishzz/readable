@@ -11,6 +11,7 @@ import { getCategoriesReady } from '../actions/appStatus';
 import { handleGetCategories } from '../actions/categories';
 import CreatePost from './CreatePost';
 import Post from './Post';
+import PageNotFound from './PageNotFound';
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -50,8 +51,9 @@ function App(props) {
                 )}
                 <Route path='/posts/new' component={CreatePost} />
                 <Route path='/posts/:pid' component={Post} />
+                <Route component={PageNotFound} />
               </Switch>
-            : <Typography variant="h4">Loading...</Typography>
+            : <Typography variant="body1">Loading...</Typography>
           }
         </div>
       </Fragment>

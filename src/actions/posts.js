@@ -99,10 +99,12 @@ function updatePost(post) {
   }
 }
 
+// Note, when a post is deleted (deleted as true), the api will retun a empty object instead of giving an error since the post is still there.
 export function handleGetPost(pid) {
   return (dispatch, getState) => {
     return ReadableAPI.getPost(pid)
       .then(res => {
+        // console.log(res)
         const { posts } = getState()
         const pids = posts.map(post => post.id)
 

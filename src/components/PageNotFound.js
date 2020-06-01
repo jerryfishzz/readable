@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
-import { withRouter, Link } from 'react-router-dom'
 import { 
   makeStyles,
   Typography,
@@ -9,8 +9,6 @@ import {
   IconButton
 } from '@material-ui/core';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
-
-import PostForm from './PostForm';
 import { hideLoadingBar } from '../actions/appStatus';
 
 const useStyles = makeStyles((theme) => ({
@@ -25,43 +23,35 @@ const useStyles = makeStyles((theme) => ({
   margin: {
     marginLeft: theme.spacing(1)
   },
+  description: {
+    width: '100%'
+  }
 }));
 
-function CreatePost(props) {
+function PageNotFound(props) {
   const classes = useStyles();
-  const { initialDropdown, hideLoadingBar } = props
 
   useEffect(() => {
-    hideLoadingBar()
+    props.hideLoadingBar()
   })
-  
+
   return (
     <Container maxWidth="lg" >
       <Grid container justify="center">
         <Grid item container direction="row" className={classes.root}>
           <Grid item container alignItems="center">
-            <IconButton component={Link} to={`/${initialDropdown}`}>
+            <IconButton component={Link} to="/">
               <NavigateBeforeIcon />
             </IconButton>
             <Typography className={classes.margin} variant="button">Back to Post List</Typography>
           </Grid>
-          <PostForm />
+          <Typography variant="body1" align="center" className={classes.description}>
+            404 Page not found.
+          </Typography>
         </Grid>
       </Grid>
     </Container>
   )
 }
 
-const mapStatesToProps = (state, { location }) => {
-  let initialDropdown = ''
-  if (location.search !== '') {
-    const query = new URLSearchParams(location.search)
-    initialDropdown = query.get('category')
-  }
-
-  return { 
-    initialDropdown,
-  }
-}
-
-export default withRouter(connect(mapStatesToProps, { hideLoadingBar })(CreatePost)) 
+export default connect(null, { hideLoadingBar })(PageNotFound)

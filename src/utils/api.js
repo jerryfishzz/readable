@@ -56,7 +56,7 @@ export function deletePost(pid) {
     url,
     headers: {'Authorization': 'whatever-you-want'},
   }).then(res => {
-    // console.log(res)
+    console.log(res)
     return res.data
   })
 }
@@ -84,7 +84,10 @@ export function getPost(pid) {
     method: 'get',
     url,
     headers: {'Authorization': 'whatever-you-want'},
-  }).then(res => res.data)
+  }).then(res => {
+    // console.log(res)
+    return res.data
+  })
 }
 
 export function updatePost(pid, post) {
