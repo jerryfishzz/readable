@@ -55,7 +55,10 @@ export function deletePost(pid) {
     method: 'delete',
     url,
     headers: {'Authorization': 'whatever-you-want'},
-  }).then(res => res.data)
+  }).then(res => {
+    // console.log(res)
+    return res.data
+  })
 }
 
 export function addPost(post) {

@@ -7,6 +7,8 @@ export const START_LOADING = 'START_LOADING'
 export const STOP_LOADING = 'STOP_LOADING'
 export const SHOW_LOADING_BAR = 'SHOW_LOADING_BAR'
 export const HIDE_LOADING_BAR = 'HIDE_LOADING_BAR'
+export const START_DELETING = 'START_DELETING'
+export const STOP_DELETING = 'STOP_DELETING'
 
 export function getCategoriesReady() {
   return {
@@ -60,5 +62,17 @@ export function showLoadingBar() {
 export function hideLoadingBar() {
   return {
     type: HIDE_LOADING_BAR
+  }
+}
+
+export function startDeleting() {
+  return {
+    type: START_DELETING
+  }
+}
+
+export function stopDeleting() {
+  return {
+    type: STOP_DELETING
   }
 }

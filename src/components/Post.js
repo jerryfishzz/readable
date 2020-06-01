@@ -12,7 +12,7 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 
 import { handleGetPost } from '../actions/posts';
 import PostPaper from './PostPaper';
-import { stopLoading, hideLoadingBar } from '../actions/appStatus';
+import { hideLoadingBar } from '../actions/appStatus';
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -3,7 +3,6 @@ import {
   UP_VOTE, 
   DOWN_VOTE, 
   DELETE_POST, 
-  RESTORE_POST, 
   ADD_POST,
   UPDATE_POST
 } from "../actions/posts"
@@ -38,16 +37,6 @@ export default function posts(state = [], action) {
           return {
             ...post,
             deleted: true
-          }
-        }
-        return post
-      })
-    case RESTORE_POST:
-      return state.map(post => {
-        if (post.id === action.pid) {
-          return {
-            ...post,
-            deleted: false
           }
         }
         return post

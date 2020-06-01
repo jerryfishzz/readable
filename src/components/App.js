@@ -2,7 +2,7 @@ import React, { useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { Typography, LinearProgress } from '@material-ui/core';
+import { makeStyles, Typography, LinearProgress, Backdrop } from '@material-ui/core';
 
 import './App.css';
 import PostList from './PostList';
@@ -12,7 +12,16 @@ import { handleGetCategories } from '../actions/categories';
 import CreatePost from './CreatePost';
 import Post from './Post';
 
+const useStyles = makeStyles((theme) => ({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
+}));
+
 function App(props) {
+  const classes = useStyles();
+
   useEffect(() => { 
     const { getCategoriesReady, handleGetCategories } = props
 
@@ -29,7 +38,10 @@ function App(props) {
         <CssBaseline />
         <div className="App">
           <Header />
-          {props.showLoadingBar && <LinearProgress />}
+          {props.isLoadingBarShown && <LinearProgress />}
+          <Backdrop className={classes.backdrop} open={props.isDeletingPost}>
+            <Typography variant="h4">Deleting post...</Typography>
+          </Backdrop>
           {props.areCategoriesReady 
             ? <Switch>
                 <Route path='/' exact component={PostList} />
@@ -50,7 +62,8 @@ function App(props) {
 const mapStatesToProps = ({ categories, appStatus }) => ({ 
   categories,
   areCategoriesReady: appStatus.areCategoriesReady,
-  showLoadingBar: appStatus.showLoadingBar
+  isLoadingBarShown: appStatus.isLoadingBarShown,
+  isDeletingPost: appStatus.isDeletingPost
 })
 
 export default connect(

@@ -7,7 +7,9 @@ import {
   START_LOADING, 
   STOP_LOADING,
   SHOW_LOADING_BAR,
-  HIDE_LOADING_BAR
+  HIDE_LOADING_BAR,
+  START_DELETING,
+  STOP_DELETING
 } from "../actions/appStatus";
 
 const initialState = {
@@ -15,7 +17,8 @@ const initialState = {
   arePostsReady: false,
   currentSort: 'default',
   isLoading: false, // Response for async
-  showLoadingBar: true // Response for both app initializing and async
+  isLoadingBarShown: true, // Response for both app initializing and async
+  isDeletingPost: false
 }
 
 export default function appStatus(state = initialState, action) {
@@ -58,12 +61,22 @@ export default function appStatus(state = initialState, action) {
     case SHOW_LOADING_BAR:
       return {
         ...state,
-        showLoadingBar: true
+        isLoadingBarShown: true
       }
     case HIDE_LOADING_BAR:
       return {
         ...state,
-        showLoadingBar: false
+        isLoadingBarShown: false
+      }
+    case START_DELETING:
+      return {
+        ...state,
+        isDeletingPost: true
+      }
+    case STOP_DELETING:
+      return {
+        ...state,
+        isDeletingPost: false
       }
     default:
       return state

@@ -4,7 +4,6 @@ export const GET_POSTS = 'GET_POSTS'
 export const UP_VOTE = 'UP_VOTE'
 export const DOWN_VOTE = 'DOWN_VOTE'
 export const DELETE_POST = 'DELETE_POST'
-export const RESTORE_POST = 'RESTORE_POST'
 export const ADD_POST = 'ADD_POST'
 export const UPDATE_POST = 'UPDATE_POST'
 
@@ -72,22 +71,10 @@ function deletePost(pid) {
   }
 }
 
-function restorePost(pid) {
-  return {
-    type: RESTORE_POST,
-    pid
-  }
-}
-
 export function handleDeletePost(pid) {
   return dispatch => {
-    dispatch(deletePost(pid))
-
     return ReadableAPI.deletePost(pid)
-      .catch(err => {
-        dispatch(restorePost(pid))
-        throw err
-      })
+      .then(() => dispatch(deletePost(pid)))
   }
 }
 
