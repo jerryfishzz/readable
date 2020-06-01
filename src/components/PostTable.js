@@ -16,7 +16,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import { convertTimestampToReadable } from '../utils/helper';
 import { handleUpVote, handleDownVote, handleDeletePost } from '../actions/posts';
-import { startLoading, stopLoading } from '../actions/appStatus';
+import { startLoading, stopLoading, startDeleting, stopDeleting } from '../actions/appStatus';
 
 const useStyles = makeStyles({
   table: {
@@ -26,7 +26,15 @@ const useStyles = makeStyles({
 
 function PostTable(props) {
   const classes = useStyles();
-  const { handleUpVote, handleDownVote, handleDeletePost, isLoading, startLoading, stopLoading } = props
+  const { 
+    handleUpVote, 
+    handleDownVote, 
+    handleDeletePost, 
+    isLoading, 
+    startLoading, 
+    stopLoading,
+    startDeleting,
+    stopDeleting } = props
 
   const handleUpClick = pid => {
     startLoading()
@@ -60,12 +68,17 @@ function PostTable(props) {
 
   const handleDeleteClick = pid => {
     startLoading()
+    startDeleting()
 
     handleDeletePost(pid)
-      .then(() => stopLoading())
+      .then(() => {
+        stopLoading()
+        stopDeleting()
+      })
       .catch(err => {
         alert(err)
         stopLoading()
+        stopDeleting()
       })
   }
 
@@ -160,6 +173,13 @@ const mapStatesToProps = ({ posts, appStatus }) => {
 export default withRouter(
   connect(
     mapStatesToProps, 
-    { handleUpVote, handleDownVote, handleDeletePost, startLoading, stopLoading }
+    { 
+      handleUpVote, 
+      handleDownVote, 
+      handleDeletePost, 
+      startLoading, 
+      stopLoading, 
+      startDeleting, 
+      stopDeleting }
   )(PostTable)
 )
