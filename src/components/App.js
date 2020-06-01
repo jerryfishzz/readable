@@ -2,7 +2,7 @@ import React, { useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { Typography } from '@material-ui/core';
+import { Typography, LinearProgress } from '@material-ui/core';
 
 import './App.css';
 import PostList from './PostList';
@@ -17,7 +17,9 @@ function App(props) {
     const { getCategoriesReady, handleGetCategories } = props
 
     handleGetCategories()
-      .then(() => getCategoriesReady())
+      .then(() => {
+        getCategoriesReady()
+      })
       .catch(err => alert(err))
   }, [])
 
@@ -27,6 +29,7 @@ function App(props) {
         <CssBaseline />
         <div className="App">
           <Header />
+          {props.showLoadingBar && <LinearProgress />}
           {props.areCategoriesReady 
             ? <Switch>
                 <Route path='/' exact component={PostList} />
@@ -46,7 +49,11 @@ function App(props) {
 
 const mapStatesToProps = ({ categories, appStatus }) => ({ 
   categories,
-  areCategoriesReady: appStatus.areCategoriesReady
+  areCategoriesReady: appStatus.areCategoriesReady,
+  showLoadingBar: appStatus.showLoadingBar
 })
 
-export default connect(mapStatesToProps, { getCategoriesReady, handleGetCategories })(App)
+export default connect(
+  mapStatesToProps, 
+  { getCategoriesReady, handleGetCategories }
+)(App)

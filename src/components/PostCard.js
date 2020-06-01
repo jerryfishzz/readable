@@ -48,7 +48,7 @@ function PostCard(props) {
         >
           {post.title}
         </Typography>
-        <IconButton color="primary" onClick={handleEdit}>
+        <IconButton color="primary" disabled={false} onClick={handleEdit}>
           <EditIcon />
         </IconButton>
         <IconButton color="secondary"><DeleteIcon /></IconButton>

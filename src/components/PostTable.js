@@ -16,6 +16,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import { convertTimestampToReadable } from '../utils/helper';
 import { handleUpVote, handleDownVote, handleDeletePost } from '../actions/posts';
+import { startLoading, stopLoading } from '../actions/appStatus';
 
 const useStyles = makeStyles({
   table: {
@@ -25,29 +26,47 @@ const useStyles = makeStyles({
 
 function PostTable(props) {
   const classes = useStyles();
-  const { handleUpVote, handleDownVote, handleDeletePost } = props
+  const { handleUpVote, handleDownVote, handleDeletePost, isLoading, startLoading, stopLoading } = props
 
   const handleUpClick = pid => {
+    startLoading()
+
     const vote = {
       option: 'upVote'
     }
 
     handleUpVote(pid, vote)
-      .catch(err => alert(err))
+      .then(() => stopLoading())
+      .catch(err => {
+        alert(err)
+        stopLoading()
+      })
   }
 
   const handleDownClick = pid => {
+    startLoading()
+    
     const vote = {
       option: 'downVote'
     }
 
     handleDownVote(pid, vote)
-      .catch(err => alert(err))
+      .then(() => stopLoading())
+      .catch(err => {
+        alert(err)
+        stopLoading()
+      })
   }
 
   const handleDeleteClick = pid => {
+    startLoading()
+
     handleDeletePost(pid)
-      .catch(err => alert(err))
+      .then(() => stopLoading())
+      .catch(err => {
+        alert(err)
+        stopLoading()
+      })
   }
 
   return (
@@ -82,17 +101,29 @@ function PostTable(props) {
                       {convertTimestampToReadable(post.timestamp)}
                     </TableCell>
                     <TableCell align="right">
-                      <IconButton onClick={() => handleUpClick(post.id)}>
+                      <IconButton 
+                        onClick={() => handleUpClick(post.id)}
+                        color="primary"
+                        disabled={isLoading}
+                      >
                         <ThumbUpIcon />
                       </IconButton>
                     </TableCell>
                     <TableCell align="right">
-                      <IconButton onClick={() => handleDownClick(post.id)}>
+                      <IconButton 
+                        onClick={() => handleDownClick(post.id)}
+                        color="primary"
+                        disabled={isLoading}
+                      >
                         <ThumbDownIcon />
                       </IconButton>
                     </TableCell>
                     <TableCell align="right">
-                      <IconButton onClick={() => handleDeleteClick(post.id)}>
+                      <IconButton 
+                        onClick={() => handleDeleteClick(post.id)}
+                        color="secondary"
+                        disabled={isLoading}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </TableCell>
@@ -122,12 +153,13 @@ const mapStatesToProps = ({ posts, appStatus }) => {
 
   return {
     sortedPosts,
+    isLoading: appStatus.isLoading
   }
 }
 
 export default withRouter(
   connect(
     mapStatesToProps, 
-    { handleUpVote, handleDownVote, handleDeletePost }
+    { handleUpVote, handleDownVote, handleDeletePost, startLoading, stopLoading }
   )(PostTable)
 )

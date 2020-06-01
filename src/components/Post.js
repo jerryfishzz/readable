@@ -12,6 +12,7 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 
 import { handleGetPost } from '../actions/posts';
 import PostPaper from './PostPaper';
+import { stopLoading, hideLoadingBar } from '../actions/appStatus';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,12 +30,15 @@ const useStyles = makeStyles((theme) => ({
 
 function Post(props) {
   const classes = useStyles();
-  const { handleGetPost, match: { params }, post } = props
+  const { handleGetPost, match: { params }, post, hideLoadingBar } = props
   const [isPostReady, setIsPostReady] = useState(false)
 
   useEffect(() => {
     handleGetPost(params.pid)
-      .then(() => setIsPostReady(true))
+      .then(() => {
+        setIsPostReady(true)
+        hideLoadingBar()
+      })
       .catch(err => alert(err))
   }, [])
 
@@ -64,4 +68,9 @@ const mapStateToProps = ({ posts }, props) => {
   }
 }
 
-export default withRouter(connect(mapStateToProps, { handleGetPost })(Post))
+export default withRouter(
+  connect(
+    mapStateToProps, 
+    { handleGetPost, hideLoadingBar }
+  )(Post)
+)

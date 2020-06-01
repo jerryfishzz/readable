@@ -13,7 +13,7 @@ import CategoryDropDown from './CategoryDropDown';
 import PostTable from './PostTable';
 import SortDropDown from './SortDropDown';
 import { handleGetPosts } from '../actions/posts';
-import { getPostsReady } from '../actions/appStatus';
+import { getPostsReady, hideLoadingBar } from '../actions/appStatus';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,11 +37,14 @@ const useStyles = makeStyles((theme) => ({
 function PostList(props) {
   const classes = useStyles();
 
-  const { currentCatObjString, arePostsReady, category, handleGetPosts, getPostsReady } = props
+  const { currentCatObjString, arePostsReady, category, handleGetPosts, getPostsReady, hideLoadingBar } = props
 
   useEffect(() => {
     handleGetPosts(category)
-      .then(() => getPostsReady())
+      .then(() => {
+        getPostsReady()
+        hideLoadingBar()
+      })
       .catch(err => alert(err))
   }, [])
 
@@ -90,4 +93,4 @@ const mapStateToProps = ({ categories, appStatus }, props) => {
   }
 }
 
-export default withRouter(connect(mapStateToProps, { handleGetPosts, getPostsReady })(PostList)) 
+export default withRouter(connect(mapStateToProps, { handleGetPosts, getPostsReady, hideLoadingBar })(PostList)) 

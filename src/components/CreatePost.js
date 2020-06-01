@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom'
 import { 
@@ -11,6 +11,7 @@ import {
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 
 import PostForm from './PostForm';
+import { hideLoadingBar } from '../actions/appStatus';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,7 +30,11 @@ const useStyles = makeStyles((theme) => ({
 
 function CreatePost(props) {
   const classes = useStyles();
-  const { initialDropdown } = props
+  const { initialDropdown, hideLoadingBar } = props
+
+  useEffect(() => {
+    hideLoadingBar()
+  })
   
   return (
     <Container maxWidth="lg" >
@@ -60,4 +65,4 @@ const mapStatesToProps = (state, { location }) => {
   }
 }
 
-export default withRouter(connect(mapStatesToProps)(CreatePost)) 
+export default withRouter(connect(mapStatesToProps, { hideLoadingBar })(CreatePost)) 
