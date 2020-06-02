@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { Link, withRouter, Redirect } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { 
   makeStyles, 
   Typography,

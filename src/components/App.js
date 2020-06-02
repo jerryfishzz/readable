@@ -47,10 +47,10 @@ function App(props) {
             ? <Switch>
                 <Route path='/' exact component={PostList} />
                 {props.categories.map(category => 
-                  <Route key={category.path} path={`/${category.path}`} component={PostList} />
+                  <Route key={category.path} path={`/${category.path}`} exact component={PostList} />
                 )}
                 <Route path='/posts/new' component={CreatePost} />
-                <Route path='/posts/:pid' component={Post} />
+                <Route path='/:category/:pid' component={Post} />
                 <Route component={PageNotFound} />
               </Switch>
             : <Typography variant="body1">Loading...</Typography>

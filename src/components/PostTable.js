@@ -10,13 +10,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import { convertTimestampToReadable } from '../utils/helper';
-import { handleUpVote, handleDownVote, handleDeletePost } from '../actions/posts';
+import { handleDeletePost } from '../actions/posts';
 import { startLoading, stopLoading, startDeleting, stopDeleting } from '../actions/appStatus';
+import Like from './Like';
+import Dislike from './Dislike';
 
 const useStyles = makeStyles({
   table: {
@@ -27,44 +27,12 @@ const useStyles = makeStyles({
 function PostTable(props) {
   const classes = useStyles();
   const { 
-    handleUpVote, 
-    handleDownVote, 
     handleDeletePost, 
     isLoading, 
     startLoading, 
     stopLoading,
     startDeleting,
     stopDeleting } = props
-
-  const handleUpClick = pid => {
-    startLoading()
-
-    const vote = {
-      option: 'upVote'
-    }
-
-    handleUpVote(pid, vote)
-      .then(() => stopLoading())
-      .catch(err => {
-        alert(err)
-        stopLoading()
-      })
-  }
-
-  const handleDownClick = pid => {
-    startLoading()
-    
-    const vote = {
-      option: 'downVote'
-    }
-
-    handleDownVote(pid, vote)
-      .then(() => stopLoading())
-      .catch(err => {
-        alert(err)
-        stopLoading()
-      })
-  }
 
   const handleDeleteClick = pid => {
     startLoading()
@@ -104,7 +72,7 @@ function PostTable(props) {
                 !post.deleted && (
                   <TableRow key={post.id}>
                     <TableCell component="th" scope="row">
-                      <Link to={`/posts/${post.id}`}>{post.title}</Link>
+                      <Link to={`/${post.category}/${post.id}`}>{post.title}</Link>
                     </TableCell>
                     <TableCell align="right">{post.body}</TableCell>
                     <TableCell align="right">{post.author}</TableCell>
@@ -114,22 +82,10 @@ function PostTable(props) {
                       {convertTimestampToReadable(post.timestamp)}
                     </TableCell>
                     <TableCell align="right">
-                      <IconButton 
-                        onClick={() => handleUpClick(post.id)}
-                        color="primary"
-                        disabled={isLoading}
-                      >
-                        <ThumbUpIcon />
-                      </IconButton>
+                      <Like pid={post.id} />
                     </TableCell>
                     <TableCell align="right">
-                      <IconButton 
-                        onClick={() => handleDownClick(post.id)}
-                        color="primary"
-                        disabled={isLoading}
-                      >
-                        <ThumbDownIcon />
-                      </IconButton>
+                      <Dislike pid={post.id} />
                     </TableCell>
                     <TableCell align="right">
                       <IconButton 
@@ -174,8 +130,6 @@ export default withRouter(
   connect(
     mapStatesToProps, 
     { 
-      handleUpVote, 
-      handleDownVote, 
       handleDeletePost, 
       startLoading, 
       stopLoading, 

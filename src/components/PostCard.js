@@ -3,13 +3,17 @@ import {
   makeStyles, 
   Typography,
   Grid,
-  IconButton
+  IconButton,
+  Divider
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+
 import { handleDeletePost } from '../actions/posts';
 import { showLoadingBar, hideLoadingBar, startDeleting, stopDeleting } from '../actions/appStatus';
+import Like from './Like';
+import Dislike from './Dislike';
 
 const useStyles = makeStyles((theme) => ({
   generalMargin: {
@@ -20,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   sidePadding: {
     '& > *': {
       paddingLeft: theme.spacing(1),
-      paddingRight: theme.spacing(1),
+      // paddingRight: theme.spacing(1),
     }
   },
   padding: {
@@ -32,6 +36,14 @@ const useStyles = makeStyles((theme) => ({
   },
   flexExtend: {
     flex: 1
+  },
+  divider: {
+    width: '100%'
+  },
+  iconMargin: {
+    '& > *': {
+      marginLeft: theme.spacing(2)
+    }
   }
 }));
 
@@ -79,18 +91,6 @@ function PostCard(props) {
               >
                 {post.title}
               </Typography>
-              <IconButton 
-                color="primary"
-                onClick={handleEdit}
-              >
-                <EditIcon />
-              </IconButton>
-              <IconButton 
-                color="secondary"
-                onClick={handleDelete}
-              >
-                <DeleteIcon />
-              </IconButton>
             </Grid>
             <Grid item container alignItems="center">
               <Grid 
@@ -113,14 +113,53 @@ function PostCard(props) {
                 className={classes.sidePadding}
               >
                 <Typography variant="subtitle1" className={classes.title}>
-                  Category
+                  Comments
                 </Typography>
-                <Typography variant="body1">{post.category}</Typography>
+                <Typography variant="body1">{post.commentCount}</Typography>
+              </Grid>
+              <Grid 
+                item 
+                container 
+                xs 
+                alignItems="center" 
+                className={classes.sidePadding}
+              >
+                <Typography variant="subtitle1" className={classes.title}>
+                  Scores
+                </Typography>
+                <Typography variant="body1">{post.voteScore}</Typography>
               </Grid>
             </Grid>
             <Grid item container className={classes.sidePadding}>
-            <Typography variant="body1" align="left">{post.body}</Typography>
-          </Grid>
+              <Typography variant="body1" align="left">{post.body}</Typography>
+            </Grid>
+            <Grid item container>
+              <Divider className={classes.divider} />
+            </Grid>
+            <Grid 
+              item 
+              container 
+              alignItems="center" 
+              justify="flex-end" 
+              className={classes.iconMargin}
+            >
+              <Like pid={post.id} />
+              <Dislike pid={post.id} />
+              <IconButton 
+                color="primary"
+                onClick={handleEdit}
+                size="small"
+              >
+                <EditIcon />
+              </IconButton>
+              <IconButton 
+                color="secondary"
+                onClick={handleDelete}
+                size="small"
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Grid>
           </Fragment>
         : <Typography variant="body1" align="left">
             This post has been deleted successfully!
