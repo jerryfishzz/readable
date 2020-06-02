@@ -6,14 +6,11 @@ import {
   IconButton,
   Divider
 } from '@material-ui/core';
-import { connect } from 'react-redux';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
 
-import { handleDeletePost } from '../actions/posts';
-import { showLoadingBar, hideLoadingBar, startDeleting, stopDeleting } from '../actions/appStatus';
 import Like from './Like';
 import Dislike from './Dislike';
+import DeleteButton from './DeleteButton';
 
 const useStyles = makeStyles((theme) => ({
   generalMargin: {
@@ -49,35 +46,11 @@ const useStyles = makeStyles((theme) => ({
 
 function PostCard(props) {
   const classes = useStyles();
-  const { 
-    post, 
-    setIsEditable, 
-    handleDeletePost, 
-    showLoadingBar, 
-    hideLoadingBar,
-    startDeleting, 
-    stopDeleting } = props
+  const { post, setIsEditable } = props
 
   const [isPostDeleted, setIsPostDeleted] = useState(false)
 
   const handleEdit = () => setIsEditable(true)
-
-  const handleDelete = () => {
-    startDeleting()
-    showLoadingBar()
-
-    handleDeletePost(post.id)
-      .then(() => {
-        setIsPostDeleted(true)
-        stopDeleting()
-        hideLoadingBar()
-      })
-      .catch(err => {
-        alert(err)
-        stopDeleting()
-        hideLoadingBar()
-      })
-  }
 
   return (
     <Grid container className={classes.generalMargin}>
@@ -152,13 +125,7 @@ function PostCard(props) {
               >
                 <EditIcon />
               </IconButton>
-              <IconButton 
-                color="secondary"
-                onClick={handleDelete}
-                size="small"
-              >
-                <DeleteIcon />
-              </IconButton>
+              <DeleteButton pid={post.id} cb={setIsPostDeleted} />
             </Grid>
           </Fragment>
         : <Typography variant="body1" align="left">
@@ -169,7 +136,4 @@ function PostCard(props) {
   )
 }
 
-export default connect(
-  null, 
-  { handleDeletePost, showLoadingBar, hideLoadingBar, startDeleting, stopDeleting }
-)(PostCard)
+export default PostCard

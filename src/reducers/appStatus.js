@@ -3,9 +3,7 @@ import {
   SWITCH_SORT, 
   GET_POSTS_READY, 
   LOADING_POSTS, 
-  LOADING_CATEGORIES, 
-  START_LOADING, 
-  STOP_LOADING,
+  LOADING_CATEGORIES,
   SHOW_LOADING_BAR,
   HIDE_LOADING_BAR,
   START_DELETING,
@@ -16,8 +14,7 @@ const initialState = {
   areCategoriesReady: false,
   arePostsReady: false,
   currentSort: 'default',
-  isLoading: false, // Response for async
-  isLoadingBarShown: true, // Response for both app initializing and async
+  isLoadingBarShown: true,
   isDeletingPost: false
 }
 
@@ -47,16 +44,6 @@ export default function appStatus(state = initialState, action) {
       return {
         ...state,
         areCategoriesReady: false
-      }
-    case START_LOADING:
-      return {
-        ...state,
-        isLoading: true
-      }
-    case STOP_LOADING:
-      return {
-        ...state,
-        isLoading: false
       }
     case SHOW_LOADING_BAR:
       return {

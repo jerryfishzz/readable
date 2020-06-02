@@ -9,14 +9,11 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
 
 import { convertTimestampToReadable } from '../utils/helper';
-import { handleDeletePost } from '../actions/posts';
-import { startLoading, stopLoading, startDeleting, stopDeleting } from '../actions/appStatus';
 import Like from './Like';
 import Dislike from './Dislike';
+import DeleteButton from './DeleteButton';
 
 const useStyles = makeStyles({
   table: {
@@ -26,29 +23,6 @@ const useStyles = makeStyles({
 
 function PostTable(props) {
   const classes = useStyles();
-  const { 
-    handleDeletePost, 
-    isLoading, 
-    startLoading, 
-    stopLoading,
-    startDeleting,
-    stopDeleting } = props
-
-  const handleDeleteClick = pid => {
-    startLoading()
-    startDeleting()
-
-    handleDeletePost(pid)
-      .then(() => {
-        stopLoading()
-        stopDeleting()
-      })
-      .catch(err => {
-        alert(err)
-        stopLoading()
-        stopDeleting()
-      })
-  }
 
   return (
     <TableContainer component={Paper}>
@@ -88,13 +62,7 @@ function PostTable(props) {
                       <Dislike pid={post.id} />
                     </TableCell>
                     <TableCell align="right">
-                      <IconButton 
-                        onClick={() => handleDeleteClick(post.id)}
-                        color="secondary"
-                        disabled={isLoading}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
+                      <DeleteButton pid={post.id} />
                     </TableCell>
                   </TableRow>
                 )
@@ -126,14 +94,4 @@ const mapStatesToProps = ({ posts, appStatus }) => {
   }
 }
 
-export default withRouter(
-  connect(
-    mapStatesToProps, 
-    { 
-      handleDeletePost, 
-      startLoading, 
-      stopLoading, 
-      startDeleting, 
-      stopDeleting }
-  )(PostTable)
-)
+export default withRouter(connect(mapStatesToProps, null)(PostTable))
