@@ -101,3 +101,14 @@ export function updatePost(pid, post) {
     data: post
   }).then(res => res.data)
 }
+
+export function getPostComments(pid) {
+  const url = `${baseURL}/posts/${pid}/comments`
+
+  console.log('getting all the comments of a post from url', url)
+  return Axios({
+    method: 'get',
+    url,
+    headers: {'Authorization': 'whatever-you-want'},
+  }).then(res => res.data)
+}

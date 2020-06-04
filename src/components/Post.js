@@ -14,6 +14,7 @@ import { handleGetPost } from '../actions/posts';
 import PostPaper from './PostPaper';
 import { hideLoadingBar } from '../actions/appStatus';
 import PageNotFound from './PageNotFound';
+import { getPostComments } from '../utils/api';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,7 +42,11 @@ function Post(props) {
         // console.log(post)
         post.id ? setIsPostReady(true) : setIsPostExisting(false)
         hideLoadingBar()
+
+        // Return a promise of all the comments of the post or null
+        return post.id ? getPostComments(post.id) : post.id
       })
+      .then(res => console.log(res))
       .catch(err => {
         // console.log(err)
         alert(err)
