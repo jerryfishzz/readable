@@ -15,6 +15,7 @@ import PostPaper from './PostPaper';
 import { hideLoadingBar } from '../actions/appStatus';
 import PageNotFound from './PageNotFound';
 import { getPostComments } from '../utils/api';
+import { handleGetComments } from '../actions/comments';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Post(props) {
   const classes = useStyles();
-  const { handleGetPost, match: { params }, post, hideLoadingBar } = props
+  const { handleGetPost, match: { params }, post, hideLoadingBar, handleGetComments } = props
   const [isPostReady, setIsPostReady] = useState(false)
   const [isPostExisting, setIsPostExisting] = useState(true)
 
@@ -44,7 +45,7 @@ function Post(props) {
         hideLoadingBar()
 
         // Return a promise of all the comments of the post or null
-        return post.id ? getPostComments(post.id) : post.id
+        return post.id ? handleGetComments(post.id) : post.id
       })
       .then(res => console.log(res))
       .catch(err => {
@@ -84,6 +85,6 @@ const mapStateToProps = ({ posts }, props) => {
 export default withRouter(
   connect(
     mapStateToProps, 
-    { handleGetPost, hideLoadingBar }
+    { handleGetPost, hideLoadingBar, handleGetComments }
   )(Post)
 )
