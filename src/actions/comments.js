@@ -6,7 +6,7 @@ export const DOWN_VOTE_COMMENT = 'DOWN_VOTE_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
 export const UPDATE_COMMENT = 'UPDATE_COMMENT'
 
-function getPostComments(comments) {
+export function getPostComments(comments) {
   return {
     type: GET_POST_COMMENTS,
     comments

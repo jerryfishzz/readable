@@ -78,7 +78,7 @@ export function handleDeletePost(pid) {
   }
 }
 
-function addPost(post) {
+export function addPost(post) {
   return {
     type: ADD_POST,
     post
@@ -92,7 +92,7 @@ export function handleAddPost(post) {
   }
 }
 
-function updatePost(post) {
+export function updatePost(post) {
   return {
     type: UPDATE_POST,
     post

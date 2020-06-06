@@ -153,3 +153,10 @@ export function updateComment(cid, comment) {
     return res.data
   })
 }
+
+export function getPostAndComments(pid) {
+  return Promise.all([
+    getPost(pid),
+    getPostComments(pid)
+  ])
+}

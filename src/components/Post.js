@@ -10,12 +10,11 @@ import {
 } from '@material-ui/core';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 
-import { handleGetPost } from '../actions/posts';
 import PostPaper from './PostPaper';
 import { hideLoadingBar } from '../actions/appStatus';
 import PageNotFound from './PageNotFound';
-import { handleGetComments } from '../actions/comments';
 import CommentTable from './CommentTable';
+import { handleGetPostAndComments } from '../actions/shared';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,19 +36,25 @@ const useStyles = makeStyles((theme) => ({
 
 function Post(props) {
   const classes = useStyles();
-  const { handleGetPost, match: { params }, post, hideLoadingBar, handleGetComments } = props
+  const { 
+    match: { params }, 
+    post, 
+    hideLoadingBar, 
+    handleGetPostAndComments } = props
   const [isPostReady, setIsPostReady] = useState(false)
   const [isPostExisting, setIsPostExisting] = useState(true)
+  const [areCommentsExisting, setAreCommentsExisting] = useState(false)
 
   useEffect(() => {
-    handleGetPost(params.pid)
-      .then(({ post }) => {
-        // Return a promise of dispatching action of getting comments or null (blank array)
-        return post.id ? handleGetComments(post.id) : post.id
-      })
-      .then(res => {
-        // if (typeof res !== undefined)
-        typeof res !== undefined ? setIsPostReady(true) : setIsPostExisting(false)
+    handleGetPostAndComments(params.pid)
+      .then(({ post, comments}) => {
+        if (post) {
+          setIsPostReady(true)
+          if(comments) setAreCommentsExisting(true)
+        } else {
+          setIsPostExisting(false)
+        }
+          
         hideLoadingBar()
       })
       .catch(err => {
@@ -72,7 +77,13 @@ function Post(props) {
                 <Typography variant="button" className={classes.margin}>Back to category</Typography>
               </Grid>
               <PostPaper post={post} />
-              <Typography variant="h5" className={`${classes.margin} ${classes.commentTitle}`}>Comments</Typography>
+              {areCommentsExisting && 
+                <Typography 
+                  variant="h5" 
+                  className={`${classes.margin} ${classes.commentTitle}`}
+                >
+                  Comments
+                </Typography>}
               <CommentTable />
             </Grid>
           : <Typography variant="body1">Loading...</Typography>
@@ -91,6 +102,6 @@ const mapStateToProps = ({ posts }, props) => {
 export default withRouter(
   connect(
     mapStateToProps, 
-    { handleGetPost, hideLoadingBar, handleGetComments }
+    { hideLoadingBar, handleGetPostAndComments }
   )(Post)
 )
