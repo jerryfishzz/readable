@@ -116,8 +116,8 @@ function PostCard(props) {
               justify="flex-end" 
               className={classes.iconMargin}
             >
-              <Like pid={post.id} />
-              <Dislike pid={post.id} />
+              <Like id={post.id} />
+              <Dislike id={post.id} />
               <IconButton 
                 color="primary"
                 onClick={handleEdit}
@@ -125,7 +125,7 @@ function PostCard(props) {
               >
                 <EditIcon />
               </IconButton>
-              <DeleteButton pid={post.id} cb={setIsPostDeleted} />
+              <DeleteButton id={post.id} cb={setIsPostDeleted} />
             </Grid>
           </Fragment>
         : <Typography variant="body1" align="left">

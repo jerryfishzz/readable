@@ -5,31 +5,52 @@ import { Delete } from '@material-ui/icons';
 
 import { handleDeletePost } from '../actions/posts';
 import { startDeleting, stopDeleting, showLoadingBar, hideLoadingBar } from '../actions/appStatus';
+import { handleDeleteComment } from '../actions/comments';
 
 function DeleteButton(props) {
-  const { pid, cb, handleDeletePost, startDeleting, stopDeleting, showLoadingBar, hideLoadingBar } = props
+  const { 
+    id,
+    type, 
+    cb, 
+    handleDeletePost, 
+    startDeleting, 
+    stopDeleting, 
+    showLoadingBar, 
+    hideLoadingBar,
+    handleDeleteComment } = props
 
-  const handleDelete = pid => {
+  const handleDelete = id => {
     startDeleting()
     showLoadingBar()
 
-    handleDeletePost(pid)
-      .then(() => {
-        if (cb) cb(true)
+    type === 'comment'
+      ? handleDeleteComment(id)
+          .then(() => {
+            stopDeleting()
+            hideLoadingBar()
+          })
+          .catch(err => {
+            alert(err)
+            stopDeleting()
+            hideLoadingBar()
+          })
+      : handleDeletePost(id)
+          .then(() => {
+            if (cb) cb(true)
 
-        stopDeleting()
-        hideLoadingBar()
-      })
-      .catch(err => {
-        alert(err)
-        stopDeleting()
-        hideLoadingBar()
-      })
+            stopDeleting()
+            hideLoadingBar()
+          })
+          .catch(err => {
+            alert(err)
+            stopDeleting()
+            hideLoadingBar()
+          })
   }
 
   return (
     <IconButton 
-      onClick={() => handleDelete(pid)}
+      onClick={() => handleDelete(id)}
       color="secondary"
       size="small"
     >
@@ -38,4 +59,14 @@ function DeleteButton(props) {
   )
 }
 
-export default connect(null, { handleDeletePost, startDeleting, stopDeleting, showLoadingBar, hideLoadingBar })(DeleteButton)
+export default connect(
+  null, 
+  { 
+    handleDeletePost, 
+    startDeleting, 
+    stopDeleting, 
+    showLoadingBar, 
+    hideLoadingBar,
+    handleDeleteComment
+  }
+)(DeleteButton)

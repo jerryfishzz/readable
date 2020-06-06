@@ -1,9 +1,39 @@
-import { GET_POST_COMMENTS } from "../actions/comments";
+import { GET_POST_COMMENTS, UP_VOTE_COMMENT, DOWN_VOTE_COMMENT, DELETE_COMMENT } from "../actions/comments";
 
 export default function comments(state = [], action) {
   switch (action.type) {
     case GET_POST_COMMENTS:
       return action.comments
+    case UP_VOTE_COMMENT:
+      return state.map(comment => {
+        if (comment.id === action.cid) {
+          return {
+            ...comment,
+            voteScore: comment.voteScore + 1
+          }
+        }
+        return comment
+      })
+    case DOWN_VOTE_COMMENT:
+      return state.map(comment => {
+        if (comment.id === action.cid) {
+          return {
+            ...comment,
+            voteScore: comment.voteScore - 1
+          }
+        }
+        return comment
+      })
+    case DELETE_COMMENT:
+      return state.map(comment => {
+        if (comment.id === action.cid) {
+          return {
+            ...comment,
+            deleted: true
+          }
+        }
+        return comment
+      })
     default:
       return state
   }

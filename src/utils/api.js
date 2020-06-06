@@ -112,3 +112,29 @@ export function getPostComments(pid) {
     headers: {'Authorization': 'whatever-you-want'},
   }).then(res => res.data)
 }
+
+export function voteComment(cid, vote) {
+  const url = `${baseURL}/comments/${cid}`
+
+  console.log('voting comment from url', url)
+  return Axios({
+    method: 'post',
+    url,
+    headers: {'Authorization': 'whatever-you-want'},
+    data: vote
+  }).then(res => res.data)
+}
+
+export function deleteComment(cid) {
+  const url = `${baseURL}/comments/${cid}`
+
+  console.log('deleting a comment from url', url)
+  return Axios({
+    method: 'delete',
+    url,
+    headers: {'Authorization': 'whatever-you-want'},
+  }).then(res => {
+    console.log(res)
+    return res.data
+  })
+}

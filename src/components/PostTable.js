@@ -56,13 +56,13 @@ function PostTable(props) {
                       {convertTimestampToReadable(post.timestamp)}
                     </TableCell>
                     <TableCell align="right">
-                      <Like pid={post.id} />
+                      <Like id={post.id} />
                     </TableCell>
                     <TableCell align="right">
-                      <Dislike pid={post.id} />
+                      <Dislike id={post.id} />
                     </TableCell>
                     <TableCell align="right">
-                      <DeleteButton pid={post.id} />
+                      <DeleteButton id={post.id} />
                     </TableCell>
                   </TableRow>
                 )
@@ -90,7 +90,6 @@ const mapStatesToProps = ({ posts, appStatus }) => {
 
   return {
     sortedPosts,
-    isLoading: appStatus.isLoading
   }
 }
 

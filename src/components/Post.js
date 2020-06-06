@@ -16,6 +16,7 @@ import { hideLoadingBar } from '../actions/appStatus';
 import PageNotFound from './PageNotFound';
 import { getPostComments } from '../utils/api';
 import { handleGetComments } from '../actions/comments';
+import CommentTable from './CommentTable';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
   },
   margin: {
     marginLeft: theme.spacing(1),
+  },
+  commentTitle: {
+    marginTop: theme.spacing(3),
   }
 }));
 
@@ -44,7 +48,7 @@ function Post(props) {
         post.id ? setIsPostReady(true) : setIsPostExisting(false)
         hideLoadingBar()
 
-        // Return a promise of all the comments of the post or null
+        // Return a promise of dispatching action of getting comments or null (blank array)
         return post.id ? handleGetComments(post.id) : post.id
       })
       .then(res => console.log(res))
@@ -68,6 +72,8 @@ function Post(props) {
                 <Typography variant="button" className={classes.margin}>Back to category</Typography>
               </Grid>
               <PostPaper post={post} />
+              <Typography variant="h5" className={`${classes.margin} ${classes.commentTitle}`}>Comments</Typography>
+              <CommentTable />
             </Grid>
           : <Typography variant="body1">Loading...</Typography>
         }

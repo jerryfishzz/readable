@@ -4,29 +4,37 @@ import IconButton from '@material-ui/core/IconButton';
 import { ThumbDown } from '@material-ui/icons';
 
 import { handleDownVote } from '../actions/posts';
+import { handleDownVoteComment } from '../actions/comments';
 
 function Dislike(props) {
-  const { pid, handleDownVote } = props
+  const { id, handleDownVote, handleDownVoteComment, type } = props
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleDownClick = pid => {
+  const handleDownClick = id => {
     setIsLoading(true)
 
     const vote = {
       option: 'downVote'
     }
 
-    handleDownVote(pid, vote)
-      .then(() => setIsLoading(false))
-      .catch(err => {
-        alert(err)
-        setIsLoading(false)
-      })
+    type === 'comment'
+      ? handleDownVoteComment(id, vote)
+          .then(() => setIsLoading(false))
+          .catch(err => {
+            alert(err)
+            setIsLoading(false)
+          })
+      : handleDownVote(id, vote)
+          .then(() => setIsLoading(false))
+          .catch(err => {
+            alert(err)
+            setIsLoading(false)
+          })
   }
 
   return (
     <IconButton 
-      onClick={() => handleDownClick(pid)}
+      onClick={() => handleDownClick(id)}
       color="primary"
       size="small"
       disabled={isLoading}
@@ -36,4 +44,4 @@ function Dislike(props) {
   )
 }
 
-export default connect(null, { handleDownVote })(Dislike)
+export default connect(null, { handleDownVote, handleDownVoteComment })(Dislike)
