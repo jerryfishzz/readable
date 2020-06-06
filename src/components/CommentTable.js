@@ -10,7 +10,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-import { convertTimestampToReadable } from '../utils/helper';
 import Like from './Like';
 import Dislike from './Dislike';
 import DeleteButton from './DeleteButton';

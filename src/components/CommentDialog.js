@@ -10,12 +10,33 @@ import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 
 import { handleUpdateComment } from '../actions/comments';
+import { validateInput } from '../utils/helper';
 
 function CommentDialog(props) {
   const { comment, handleUpdateComment, cid } = props
   const [open, setOpen] = useState(false);
+
+  const handleChange = (setMethod, setInputError) => e => {
+    setMethod(e.target.value)
+    if(e.target.value !== '') setInputError(false)
+  }
+  const handleBlur = (input, setInputError) => input === '' ? setInputError(true) : setInputError(false)
+
+  const [author, setAuthor] = useState('')
+  const [authorError, setAuthorError] = useState(false)
+  const handleAuthorChange = handleChange(setAuthor, setAuthorError)
+
   const [body, setBody] = useState(comment.body)
   const [bodyError, setBodyError] = useState(false)
+  const handleBodyChange = handleChange(setBody, setBodyError)
+
+  const validateForm = () => {
+    const validateBody = validateInput(body, setBodyError)
+    const validateAuthor = validateInput(author, setAuthorError)
+
+    return cid ? validateBody : validateBody && validateAuthor
+  }
+
   const [isButtonDisabled, setIsButtonDisabled] = useState(false)
 
   const handleClickOpen = () => {
@@ -24,29 +45,36 @@ function CommentDialog(props) {
 
   const handleClose = () => {
     setOpen(false);
+    setAuthorError(false)
+    setBodyError(false)
+
+    if (cid) setBody(comment.body)
   };
 
-  const handleChange = e => setBody(e.target.value)
-
   const handleSubmit = () => {
-    setIsButtonDisabled(true)
+    const isFormValid = validateForm()
 
-    const submittedComment = {
-      timestamp: Date.now(),
-      body: body
+    if (isFormValid) {
+      setIsButtonDisabled(true)
+
+      const submittedComment = {
+        timestamp: Date.now(),
+        body: body
+      }
+
+      body === ''
+        ? setBodyError(true)
+        : handleUpdateComment(cid, submittedComment)
+            .then(() => {
+              alert('Comment has been updated successfully!')
+              setIsButtonDisabled(false)
+            })
+            .catch(err => {
+              alert(err)
+              setIsButtonDisabled(false)
+            })
     }
-
-    body === ''
-      ? setBodyError(true)
-      : handleUpdateComment(cid, submittedComment)
-          .then(() => {
-            alert('Comment has been updated successfully!')
-            setIsButtonDisabled(false)
-          })
-          .catch(err => {
-            alert(err)
-            setIsButtonDisabled(false)
-          })
+    
   }
 
   return (
@@ -65,16 +93,25 @@ function CommentDialog(props) {
       >
         <DialogTitle>Edit Comment</DialogTitle>
         <DialogContent>
+          {!cid && 
+            <TextField
+              margin="dense"
+              label="Author"
+              fullWidth
+              value={author}
+              onChange={handleAuthorChange}
+              helperText={authorError ? 'Cannot be blank!' : ''}
+              error={authorError}
+            />}
           <TextField
-            autoFocus
             margin="dense"
             label="Body"
             fullWidth
             value={body}
-            onChange={handleChange}
+            onChange={handleBodyChange}
+            onBlur={() => handleBlur(body, setBodyError)} 
             helperText={bodyError ? 'Cannot be blank!' : ''}
             error={bodyError}
-            disabled={isButtonDisabled}
             multiline
             rows={2}
           />
@@ -83,7 +120,11 @@ function CommentDialog(props) {
           <Button onClick={handleClose} color="secondary">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="primary">
+          <Button 
+            onClick={handleSubmit} 
+            color="primary"
+            disabled={isButtonDisabled}
+          >
             Submit
           </Button>
         </DialogActions>

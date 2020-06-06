@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 import uniqid from 'uniqid'
 
-import { capitalizedString } from '../utils/helper';
+import { capitalizedString, validateInput } from '../utils/helper';
 import { handleUpdatePost } from '../actions/posts';
 
 const useStyles = makeStyles((theme) => ({
@@ -50,14 +50,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2)
   }
 }));
-
-const validateInput = (input, setInputError) => {
-  if (input === '') {
-    setInputError(true)
-    return false
-  }
-  return true
-}
 
 function PostForm(props) {
   const classes = useStyles();
