@@ -138,3 +138,18 @@ export function deleteComment(cid) {
     return res.data
   })
 }
+
+export function updateComment(cid, comment) {
+  const url = `${baseURL}/comments/${cid}`
+
+  console.log('updating a comment from url', url)
+  return Axios({
+    method: 'put',
+    url,
+    headers: {'Authorization': 'whatever-you-want'},
+    data: comment
+  }).then(res => {
+    console.log(res)
+    return res.data
+  })
+}

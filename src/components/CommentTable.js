@@ -14,12 +14,16 @@ import { convertTimestampToReadable } from '../utils/helper';
 import Like from './Like';
 import Dislike from './Dislike';
 import DeleteButton from './DeleteButton';
+import CommentDialog from './CommentDialog';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   table: {
     minWidth: 650,
   },
-});
+  tableContainer: {
+    marginBottom: theme.spacing(3),
+  }
+}));
 
 function CommentTable(props) {
   const classes = useStyles();
@@ -31,12 +35,11 @@ function CommentTable(props) {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="right">Body</TableCell>
-            <TableCell align="right">Author</TableCell>
+            <TableCell align="left">Author</TableCell>
             <TableCell align="right">Current score</TableCell>
-            <TableCell align="right">Created time</TableCell>
             <TableCell align="right">Like</TableCell>
             <TableCell align="right">Dislike</TableCell>
+            <TableCell align="right">Edit</TableCell>
             <TableCell align="right">Delete</TableCell>
           </TableRow>
         </TableHead>
@@ -44,17 +47,16 @@ function CommentTable(props) {
           {props.sortedComments.map(comment => 
             !comment.deleted && (
               <TableRow key={comment.id}>
-                <TableCell align="right">{comment.body}</TableCell>
-                <TableCell align="right">{comment.author}</TableCell>
+                <TableCell align="left">{comment.author}</TableCell>
                 <TableCell align="right">{comment.voteScore}</TableCell>
-                <TableCell align="right">
-                  {convertTimestampToReadable(comment.timestamp)}
-                </TableCell>
                 <TableCell align="right">
                   <Like id={comment.id} type="comment" />
                 </TableCell>
                 <TableCell align="right">
                   <Dislike id={comment.id} type="comment" />
+                </TableCell>
+                <TableCell align="right">
+                  <CommentDialog cid={comment.id} />
                 </TableCell>
                 <TableCell align="right">
                   <DeleteButton id={comment.id} type="comment" />

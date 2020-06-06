@@ -227,25 +227,24 @@ function PostForm(props) {
           rows={2}
         />
         <Grid item container justify="flex-end" className={classes.buttonContainer}>
-          <Button 
-            fullWidth={!post}
-            variant="contained"
-            onClick={handleSubmit}
-            disabled={isButtonDisabled}
-            color="primary"
-          >
-            Submit
-          </Button>
           {post && 
             <Button 
               variant="contained"
               onClick={handleCancel}
               color="secondary"
-              className={classes.cancel}
-              disabled={isButtonDisabled}
             >
               CANCEL
             </Button>}
+          <Button 
+            fullWidth={!post}
+            variant="contained"
+            onClick={handleSubmit}
+            className={classes.cancel}
+            disabled={isButtonDisabled}
+            color="primary"
+          >
+            Submit
+          </Button>
         </Grid>
       </Grid>
     </form>

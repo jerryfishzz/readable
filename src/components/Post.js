@@ -14,7 +14,6 @@ import { handleGetPost } from '../actions/posts';
 import PostPaper from './PostPaper';
 import { hideLoadingBar } from '../actions/appStatus';
 import PageNotFound from './PageNotFound';
-import { getPostComments } from '../utils/api';
 import { handleGetComments } from '../actions/comments';
 import CommentTable from './CommentTable';
 
@@ -22,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: '60%',
     paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(3),
 
     '& > *': {
       margin: theme.spacing(1),
@@ -44,14 +44,14 @@ function Post(props) {
   useEffect(() => {
     handleGetPost(params.pid)
       .then(({ post }) => {
-        // console.log(post)
-        post.id ? setIsPostReady(true) : setIsPostExisting(false)
-        hideLoadingBar()
-
         // Return a promise of dispatching action of getting comments or null (blank array)
         return post.id ? handleGetComments(post.id) : post.id
       })
-      .then(res => console.log(res))
+      .then(res => {
+        // if (typeof res !== undefined)
+        typeof res !== undefined ? setIsPostReady(true) : setIsPostExisting(false)
+        hideLoadingBar()
+      })
       .catch(err => {
         // console.log(err)
         alert(err)

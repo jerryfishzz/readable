@@ -1,4 +1,4 @@
-import { GET_POST_COMMENTS, UP_VOTE_COMMENT, DOWN_VOTE_COMMENT, DELETE_COMMENT } from "../actions/comments";
+import { GET_POST_COMMENTS, UP_VOTE_COMMENT, DOWN_VOTE_COMMENT, DELETE_COMMENT, UPDATE_COMMENT } from "../actions/comments";
 
 export default function comments(state = [], action) {
   switch (action.type) {
@@ -31,6 +31,13 @@ export default function comments(state = [], action) {
             ...comment,
             deleted: true
           }
+        }
+        return comment
+      })
+    case UPDATE_COMMENT:
+      return state.map(comment => {
+        if (comment.id === action.comment.id) {
+          return action.comment
         }
         return comment
       })
