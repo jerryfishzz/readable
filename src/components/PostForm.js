@@ -231,7 +231,7 @@ function PostForm(props) {
             fullWidth={!post}
             variant="contained"
             onClick={handleSubmit}
-            className={classes.cancel}
+            className={post ? classes.cancel : ''}
             disabled={isButtonDisabled}
             color="primary"
           >

@@ -26,6 +26,8 @@ function DeleteButton(props) {
     type === 'comment'
       ? handleDeleteComment(id)
           .then(() => {
+            alert('Comment has been deleted successfully!')
+
             stopDeleting()
             hideLoadingBar()
           })
@@ -36,6 +38,7 @@ function DeleteButton(props) {
           })
       : handleDeletePost(id)
           .then(() => {
+            alert('Post has been deleted successfully!')
             if (cb) cb(true)
 
             stopDeleting()

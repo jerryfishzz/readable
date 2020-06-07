@@ -1,4 +1,4 @@
-import { GET_POST_COMMENTS, UP_VOTE_COMMENT, DOWN_VOTE_COMMENT, DELETE_COMMENT, UPDATE_COMMENT } from "../actions/comments";
+import { GET_POST_COMMENTS, UP_VOTE_COMMENT, DOWN_VOTE_COMMENT, DELETE_COMMENT, UPDATE_COMMENT, ADD_COMMENT } from "../actions/comments";
 
 export default function comments(state = [], action) {
   switch (action.type) {
@@ -41,6 +41,8 @@ export default function comments(state = [], action) {
         }
         return comment
       })
+    case ADD_COMMENT:
+      return [...state, action.comment]
     default:
       return state
   }

@@ -134,7 +134,7 @@ export function deleteComment(cid) {
     url,
     headers: {'Authorization': 'whatever-you-want'},
   }).then(res => {
-    console.log(res)
+    // console.log(res)
     return res.data
   })
 }
@@ -149,7 +149,7 @@ export function updateComment(cid, comment) {
     headers: {'Authorization': 'whatever-you-want'},
     data: comment
   }).then(res => {
-    console.log(res)
+    // console.log(res)
     return res.data
   })
 }
@@ -159,4 +159,19 @@ export function getPostAndComments(pid) {
     getPost(pid),
     getPostComments(pid)
   ])
+}
+
+export function addComment(comment) {
+  const url = `${baseURL}/comments`
+
+  console.log('adding a comment from url', url)
+  return Axios({
+    method: 'post',
+    url,
+    headers: {'Authorization': 'whatever-you-want'},
+    data: comment
+  }).then(res => {
+    // console.log(res)
+    return res.data
+  })
 }

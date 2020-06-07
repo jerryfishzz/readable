@@ -15,6 +15,7 @@ import { hideLoadingBar } from '../actions/appStatus';
 import PageNotFound from './PageNotFound';
 import CommentTable from './CommentTable';
 import { handleGetPostAndComments } from '../actions/shared';
+import CommentDialog from './CommentDialog';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,8 +30,8 @@ const useStyles = makeStyles((theme) => ({
   margin: {
     marginLeft: theme.spacing(1),
   },
-  commentTitle: {
-    marginTop: theme.spacing(3),
+  commentDialogContainer: {
+    paddingTop: theme.spacing(1)
   }
 }));
 
@@ -77,10 +78,18 @@ function Post(props) {
                 <Typography variant="button" className={classes.margin}>Back to category</Typography>
               </Grid>
               <PostPaper post={post} />
+              <Grid 
+                item 
+                container 
+                justify="flex-end" 
+                className={classes.commentDialogContainer}
+              >
+                <CommentDialog pid={post.id} />
+              </Grid>
               {areCommentsExisting && 
                 <Typography 
                   variant="h5" 
-                  className={`${classes.margin} ${classes.commentTitle}`}
+                  className={classes.margin}
                 >
                   Comments
                 </Typography>}

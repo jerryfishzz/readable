@@ -5,6 +5,7 @@ export const UP_VOTE_COMMENT = 'UP_VOTE_COMMENT'
 export const DOWN_VOTE_COMMENT = 'DOWN_VOTE_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
 export const UPDATE_COMMENT = 'UPDATE_COMMENT'
+export const ADD_COMMENT = 'ADD_COMMENT'
 
 export function getPostComments(comments) {
   return {
@@ -83,5 +84,19 @@ export function handleUpdateComment(cid, comment) {
   return dispatch => {
     return ReadableAPI.updateComment(cid, comment)
       .then(res => dispatch(updateComment(res)))
+  }
+}
+
+function addComment(comment) {
+  return {
+    type: ADD_COMMENT,
+    comment
+  }
+}
+
+export function handleAddComment(comment) {
+  return dispatch => {
+    return ReadableAPI.addComment(comment)
+      .then(res => dispatch(addComment(res)))
   }
 }

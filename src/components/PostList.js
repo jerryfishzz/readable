@@ -55,7 +55,8 @@ function PostList(props) {
           <CategoryDropDown />
           <Button 
             variant="contained"
-            component={Link} 
+            color="primary"
+            component={Link}
             to={category === '' ? '/posts/new' : `/posts/new?category=${category}`}
           >
             Add Post

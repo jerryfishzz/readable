@@ -8,12 +8,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
+import uniqid from 'uniqid'
 
-import { handleUpdateComment } from '../actions/comments';
+import { handleUpdateComment, handleAddComment } from '../actions/comments';
 import { validateInput } from '../utils/helper';
 
 function CommentDialog(props) {
-  const { comment, handleUpdateComment, cid } = props
+  const { comment, handleUpdateComment, handleAddComment, cid, pid } = props
   const [open, setOpen] = useState(false);
 
   const handleChange = (setMethod, setInputError) => e => {
@@ -26,7 +27,8 @@ function CommentDialog(props) {
   const [authorError, setAuthorError] = useState(false)
   const handleAuthorChange = handleChange(setAuthor, setAuthorError)
 
-  const [body, setBody] = useState(comment.body)
+  const initialBody = comment ? comment.body : ''
+  const [body, setBody] = useState(initialBody)
   const [bodyError, setBodyError] = useState(false)
   const handleBodyChange = handleChange(setBody, setBodyError)
 
@@ -41,6 +43,9 @@ function CommentDialog(props) {
 
   const handleClickOpen = () => {
     setOpen(true);
+
+    // When editing, set body value equals to comment in store
+    if (cid) setBody(comment.body)
   };
 
   const handleClose = () => {
@@ -48,7 +53,10 @@ function CommentDialog(props) {
     setAuthorError(false)
     setBodyError(false)
 
-    if (cid) setBody(comment.body)
+    if (pid) {
+      setAuthor('')
+      setBody('')
+    }
   };
 
   const handleSubmit = () => {
@@ -57,17 +65,38 @@ function CommentDialog(props) {
     if (isFormValid) {
       setIsButtonDisabled(true)
 
-      const submittedComment = {
-        timestamp: Date.now(),
-        body: body
-      }
+      const submittedComment = cid
+        ? {
+            timestamp: Date.now(),
+            body: body
+          }
+        : {
+            id: uniqid(),
+            timestamp: Date.now(),
+            body: body,
+            author: author,
+            parentId: pid
+          }
 
-      body === ''
-        ? setBodyError(true)
+      !cid
+        ? handleAddComment(submittedComment)
+            .then(() => {
+              alert('Comment has been added successfully!')
+
+              setBody('')
+              setAuthor('')
+              setIsButtonDisabled(false)
+              handleClose()
+            })
+            .catch(err => {
+              alert(err)
+              setIsButtonDisabled(false)
+            })
         : handleUpdateComment(cid, submittedComment)
             .then(() => {
               alert('Comment has been updated successfully!')
               setIsButtonDisabled(false)
+              handleClose()
             })
             .catch(err => {
               alert(err)
@@ -79,19 +108,26 @@ function CommentDialog(props) {
 
   return (
     <Fragment>
-      <IconButton 
-        color="primary"
-        onClick={handleClickOpen}
-        size="small"
-      >
-        <EditIcon />
-      </IconButton>
+      {!cid &&
+        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+          Add Comment
+        </Button>
+      }
+      {cid && 
+        <IconButton 
+          color="primary"
+          onClick={handleClickOpen}
+          size="small"
+        >
+          <EditIcon />
+        </IconButton>
+      }
       <Dialog 
         open={open} 
         onClose={handleClose}
         fullWidth
       >
-        <DialogTitle>Edit Comment</DialogTitle>
+        <DialogTitle>{cid ? 'Edit Comment' : 'Add Comment'}</DialogTitle>
         <DialogContent>
           {!cid && 
             <TextField
@@ -100,6 +136,7 @@ function CommentDialog(props) {
               fullWidth
               value={author}
               onChange={handleAuthorChange}
+              onBlur={() => handleBlur(author, setAuthorError)}
               helperText={authorError ? 'Cannot be blank!' : ''}
               error={authorError}
             />}
@@ -117,7 +154,7 @@ function CommentDialog(props) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="secondary">
+          <Button onClick={() => handleClose()} color="secondary">
             Cancel
           </Button>
           <Button 
@@ -137,4 +174,4 @@ const mapStatesToProps = ({ comments }, { cid }) => ({
   comment: comments.filter(comment => comment.id === cid)[0]
 })
 
-export default connect(mapStatesToProps, { handleUpdateComment })(CommentDialog)
+export default connect(mapStatesToProps, { handleUpdateComment, handleAddComment })(CommentDialog)

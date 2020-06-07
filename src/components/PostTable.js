@@ -34,7 +34,6 @@ function PostTable(props) {
             <TableCell align="right">Author</TableCell>
             <TableCell align="right">Number of comments</TableCell>
             <TableCell align="right">Current score</TableCell>
-            <TableCell align="right">Created time</TableCell>
             <TableCell align="right">Like</TableCell>
             <TableCell align="right">Dislike</TableCell>
             <TableCell align="right">Delete</TableCell>
@@ -52,9 +51,6 @@ function PostTable(props) {
                     <TableCell align="right">{post.author}</TableCell>
                     <TableCell align="right">{post.commentCount}</TableCell>
                     <TableCell align="right">{post.voteScore}</TableCell>
-                    <TableCell align="right">
-                      {convertTimestampToReadable(post.timestamp)}
-                    </TableCell>
                     <TableCell align="right">
                       <Like id={post.id} />
                     </TableCell>
